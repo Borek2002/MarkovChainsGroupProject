@@ -1,0 +1,28 @@
+#PUT http://localhost:8080/markovchain/matrixAndVector
+#Content-Type: application/json
+#
+#{
+#  "transitionMatrix": [[1.0, 0.5,0.25], [0.0,0.5, 0.25], [0.0,0.0,0.5]],
+#  "initialVector": [0.0, 0.0, 1.0]
+#}
+
+PUT http://localhost:8080/markovchain/matrixAndVector
+Content-Type: application/json
+
+{
+  "transitionMatrix": [
+    [
+      0.0,
+      0.25
+    ],
+    [
+      1.0,
+      0.75
+    ]
+  ],
+  "initialVector": [
+    0.5,
+    0.5
+  ]
+}
+
