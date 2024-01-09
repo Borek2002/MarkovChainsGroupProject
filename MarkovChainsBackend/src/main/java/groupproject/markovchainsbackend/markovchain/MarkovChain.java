@@ -95,4 +95,56 @@ public class MarkovChain {
         }
 
     }
+
+    public RealVector calculateFinalProbabilityVector() {
+        // Obliczanie wartości własnych i wektorów własnych
+        EigenDecomposition eigenDecomposition = new EigenDecomposition(transitionMatrix);
+
+        // Pobieranie macierzy wektorów własnych
+        RealMatrix eigenvectorMatrix = eigenDecomposition.getV();
+
+        // Macierz diagonalna z wartościami własnymi
+        RealMatrix diagonalMatrix = MatrixUtils.createRealDiagonalMatrix(eigenDecomposition.getRealEigenvalues());
+
+        // Macierz odwracalna P
+        RealMatrix inverseP = MatrixUtils.inverse(eigenvectorMatrix);
+
+        // Obliczanie macierzy P^(-1) * D^n * P dla n dążącego do nieskończoności
+        RealMatrix PInverseDToInfinityP = eigenvectorMatrix.multiply(MatrixUtils.createRealDiagonalMatrix(diagonalToInfinity(diagonalMatrix))).multiply(inverseP);
+
+        // Przemnóż wektor początkowy przez uzyskaną macierz
+        RealVector finalVector = PInverseDToInfinityP.operate(initialVector);
+
+        // Wyświetlanie wyników
+        System.out.println("Macierz A:");
+        MarkovChain.printMatrix(transitionMatrix);
+
+        System.out.println("Macierz diagonalna D:");
+        MarkovChain.printMatrix(diagonalMatrix);
+
+        System.out.println("Macierz odwracalna P:");
+        MarkovChain.printMatrix(eigenvectorMatrix);
+
+        System.out.println("Macierz odwracalna P^-1:");
+        MarkovChain.printMatrix(inverseP);
+
+        System.out.println("PInverseDToInfinityP:");
+        MarkovChain.printMatrix(PInverseDToInfinityP);
+
+        System.out.println("Wektor prawdopodobieństw finalnych dla n dążącego do nieskończoności:");
+        MarkovChain.printVector(finalVector);
+
+
+        return finalVector;
+    }
+
+    // Metoda dla uniknięcia wartości NaN dla nieskończoności
+    private static double[] diagonalToInfinity(RealMatrix diagonalMatrix) {
+        int size = diagonalMatrix.getRowDimension();
+        double[] diagonalElements = new double[size];
+        for (int i = 0; i < size; i++) {
+            diagonalElements[i] = Math.pow(diagonalMatrix.getEntry(i, i), Integer.MAX_VALUE);
+        }
+        return diagonalElements;
+    }
 }
