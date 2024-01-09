@@ -22,14 +22,17 @@ public class MarkovChainsBackendApplication {
                 {0.0,0.25},
                 {1.0, 0.75}
         };
-        double[] initialVectorData = {0.5,0.5}; // Przykładowy wektor początkowy
+        double[] initialVectorData = {0.7,0.3}; // Przykładowy wektor początkowy
 
         RealMatrix transitionMatrix = new Array2DRowRealMatrix(matrixData2);
         RealVector initialVector = new ArrayRealVector(initialVectorData);
 
         MarkovChain markovChain = new MarkovChain(transitionMatrix, initialVector);
-        RealVector result = markovChain.calculateStationaryDistribution();
+        RealVector result = markovChain.calculateProbabilityVectorAfterNSteps(5);
         MarkovChain.printVector(result);
+
+        RealVector result2 = markovChain.calculateFinalProbabilityVector();
+        //MarkovChain.printVector(result2);
 
     }
 

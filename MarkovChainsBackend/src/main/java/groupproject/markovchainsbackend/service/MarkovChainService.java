@@ -17,17 +17,22 @@ public class MarkovChainService {
     private RealMatrix matrix;
 
     @Autowired
-    public MarkovChainService(MarkovChain markovChain){
-        this.markovChain=markovChain;
+    public MarkovChainService(MarkovChain markovChain) {
+        this.markovChain = markovChain;
     }
 
-    public double[] calculateProbabilityVectorAfterNSteps(int n){
+    public double[] calculateProbabilityVectorAfterNSteps(int n) {
         RealVector result = this.markovChain.calculateProbabilityVectorAfterNSteps(n);
         return result.toArray();
     }
 
-    public double[] calculateStationaryDistribution(){
+    public double[] calculateStationaryDistribution() {
         RealVector result = this.markovChain.calculateStationaryDistribution();
+        return result.toArray();
+    }
+
+    public double[] calculateProbabilityVectorAfterNSteps() {
+        RealVector result = this.markovChain.calculateFinalProbabilityVector();
         return result.toArray();
     }
 }
