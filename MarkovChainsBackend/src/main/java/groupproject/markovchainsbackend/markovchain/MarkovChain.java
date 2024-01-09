@@ -17,6 +17,7 @@ import javax.management.ConstructorParameters;
 public class MarkovChain {
     private RealMatrix transitionMatrix;
     private RealVector initialVector;
+    private int steps;
 
     public RealVector calculateProbabilityVectorAfterNSteps(int n) {
         RealVector result = initialVector;
@@ -28,7 +29,7 @@ public class MarkovChain {
         return result;
     }
 
-    public RealVector calculateStationaryDistribution() {
+    public RealVector calculateStationaryDistribution() {  //metoda potęgowa
         int maxIterations = 1000;
         double epsilon = 1e-10;
 
@@ -48,6 +49,36 @@ public class MarkovChain {
 
         throw new RuntimeException("Błąd przy wyliczeniu prawdopodobieństwa stacjonarnego");
     }
+
+    public int getImmersiveState() {
+        int immersive = -1;
+        for (int i = 0; i < this.transitionMatrix.getColumnDimension(); i++) {
+            for (int j = 0; j < this.transitionMatrix.getRowDimension(); j++) {
+                if (i == j && this.transitionMatrix.getEntry(i, j) == 1) {
+                    immersive = i;
+                }
+            }
+        }
+        return immersive;
+    }
+
+    public boolean checkImmersiveState() {
+        return getImmersiveState() >= 0;
+    }
+
+    public boolean checkOddsAmountEqualOne(double[][] matrix){
+        for (int i = 0; i < matrix.length; i++) {
+            double rowSum =0.0;
+            for (int j = 0; j < matrix[i].length; j++) {
+                rowSum+=matrix[i][j];
+            }
+            if (Math.abs(rowSum - 1.0) > 1e-10) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public static void printMatrix(RealMatrix matrix) {
         for (int i = 0; i < matrix.getRowDimension(); i++) {
