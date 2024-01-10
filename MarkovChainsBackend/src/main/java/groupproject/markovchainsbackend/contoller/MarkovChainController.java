@@ -12,6 +12,12 @@ public interface MarkovChainController {
     @GetMapping("/markovchain/stationaryDistribution")
     public double[] getStationaryDistributions();
 
+    @GetMapping("/markovchain/finalProbability")
+    public double[] getFinalProbability();
+
+    @GetMapping("/markovchain/immersiveState")
+    public int getImmersiveState();
+
     @PutMapping("/markovchain/matrixAndVector")
     public ResponseEntity<String> setMatrixAndVector(@RequestBody MarkovRequest request);
 }

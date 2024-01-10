@@ -19,13 +19,17 @@ public class MarkovChain {
     private RealVector initialVector;
     private int steps;
 
+    public MarkovChain(RealMatrix transitionMatrix, RealVector initialVector) {
+        this.transitionMatrix = transitionMatrix;
+        this.initialVector = initialVector;
+    }
+
     public RealVector calculateProbabilityVectorAfterNSteps(int n) {
         RealVector result = initialVector;
 
         for (int i = 0; i < n; i++) {
             result = transitionMatrix.operate(result);
         }
-
         return result;
     }
 
@@ -43,10 +47,8 @@ public class MarkovChain {
             if (nextGuess.subtract(initialGuess).getNorm() < epsilon) {
                 return nextGuess.mapDivide(nextGuess.getL1Norm());
             }
-
             initialGuess = nextGuess;
         }
-
         throw new RuntimeException("Błąd przy wyliczeniu prawdopodobieństwa stacjonarnego");
     }
 
@@ -66,34 +68,17 @@ public class MarkovChain {
         return getImmersiveState() >= 0;
     }
 
-    public boolean checkOddsAmountEqualOne(double[][] matrix){
+    public boolean checkOddsAmountEqualOne(double[][] matrix) {
         for (int i = 0; i < matrix.length; i++) {
-            double rowSum =0.0;
+            double rowSum = 0.0;
             for (int j = 0; j < matrix[i].length; j++) {
-                rowSum+=matrix[i][j];
+                rowSum += matrix[i][j];
             }
             if (Math.abs(rowSum - 1.0) > 1e-10) {
                 return false;
             }
         }
         return true;
-    }
-
-
-    public static void printMatrix(RealMatrix matrix) {
-        for (int i = 0; i < matrix.getRowDimension(); i++) {
-            for (int j = 0; j < matrix.getColumnDimension(); j++) {
-                System.out.print(matrix.getEntry(i, j) + " ");
-            }
-            System.out.println();
-        }
-    }
-
-    public static void printVector(RealVector vector) {
-        for (int i = 0; i < vector.getDimension(); i++) {
-            System.out.println(vector.getEntry(i) + " ");
-        }
-
     }
 
     public RealVector calculateFinalProbabilityVector() {
@@ -133,8 +118,6 @@ public class MarkovChain {
 
         System.out.println("Wektor prawdopodobieństw finalnych dla n dążącego do nieskończoności:");
         MarkovChain.printVector(finalVector);
-
-
         return finalVector;
     }
 
@@ -146,5 +129,20 @@ public class MarkovChain {
             diagonalElements[i] = Math.pow(diagonalMatrix.getEntry(i, i), Integer.MAX_VALUE);
         }
         return diagonalElements;
+    }
+
+    public static void printMatrix(RealMatrix matrix) {
+        for (int i = 0; i < matrix.getRowDimension(); i++) {
+            for (int j = 0; j < matrix.getColumnDimension(); j++) {
+                System.out.print(matrix.getEntry(i, j) + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public static void printVector(RealVector vector) {
+        for (int i = 0; i < vector.getDimension(); i++) {
+            System.out.println(vector.getEntry(i) + " ");
+        }
     }
 }

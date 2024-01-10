@@ -31,8 +31,12 @@ public class MarkovChainService {
         return result.toArray();
     }
 
-    public double[] calculateProbabilityVectorAfterNSteps() {
+    public double[] calculateFinalProbability() {
         RealVector result = this.markovChain.calculateFinalProbabilityVector();
         return result.toArray();
+    }
+
+    public int getImmersiveState(){
+        return this.markovChain.getImmersiveState();
     }
 }
