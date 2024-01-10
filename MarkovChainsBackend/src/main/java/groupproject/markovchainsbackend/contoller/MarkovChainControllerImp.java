@@ -31,6 +31,16 @@ public class MarkovChainControllerImp implements MarkovChainController {
     }
 
     @Override
+    public double[] getFinalProbability() {
+        return this.markovChainService.calculateFinalProbability();
+    }
+
+    @Override
+    public int getImmersiveState() {
+        return this.markovChainService.getImmersiveState();
+    }
+
+    @Override
     public ResponseEntity<String> setMatrixAndVector(@RequestBody MarkovRequest request){
         markovChainService.getMarkovChain().setInitialVector(new ArrayRealVector(request.getInitialVector()));
         markovChainService.getMarkovChain().setTransitionMatrix(new Array2DRowRealMatrix(request.getTransitionMatrix()));

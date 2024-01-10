@@ -72,11 +72,8 @@ public class ProbabilityChart extends JFrame {
             XYSeries series = dataset.getSeries(i);
             for (int j = 0; j < series.getItemCount(); j++) {
                 categoryDataset.addValue(series.getY(j).doubleValue(), series.getKey(), Integer.toString(series.getX(j).intValue()));
-
-
             }
         }
-
         return categoryDataset;
     }
 
