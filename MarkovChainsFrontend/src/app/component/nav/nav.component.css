@@ -1,0 +1,33 @@
+nav {
+  margin-bottom: 150px;
+  background: #615f8b;
+
+}
+
+#nav_links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#nav_links li {
+  display: inline-block;
+  padding: 0 20px;
+}
+
+#nav_links li a button {
+  padding: 9px 25px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+  background: none;
+  color: #2a2b41;
+  background: #b699b0;
+  text-decoration: none;
+  font-family: "Comic Sans";
+}
+
+#nav_links li a button:hover {
+  background-color: #fce2f6;
+}
