@@ -1,7 +1,7 @@
 nav {
-  margin-bottom: 150px;
-  background: #615f8b;
-
+  background: #081c15;
+  border-radius: 10px;
+  padding: 5px;
 }
 
 #nav_links {
@@ -12,22 +12,22 @@ nav {
 
 #nav_links li {
   display: inline-block;
-  padding: 0 20px;
+  padding: 0 15px;
 }
 
 #nav_links li a button {
-  padding: 9px 25px;
+  padding: 10px 30px;
   border: none;
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease 0s;
   background: none;
-  color: #2a2b41;
-  background: #b699b0;
+  font-size: 95%;
+  color: #d8f3dc;
+  background: #1b4332;
   text-decoration: none;
-  font-family: "Comic Sans";
 }
 
 #nav_links li a button:hover {
-  background-color: #fce2f6;
+  background-color: #52b788;
 }
