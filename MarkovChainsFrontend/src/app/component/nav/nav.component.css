@@ -2,6 +2,10 @@ nav {
   background: #081c15;
   border-radius: 10px;
   padding: 5px;
+  display: flex;
+  justify-content: space-between; /* Zapewnia odstęp między elementami na obu końcach */
+  align-items: center; /* Opcjonalnie, aby wyśrodkować w pionie */
+  padding: 10px;
 }
 
 #nav_links {
@@ -30,4 +34,7 @@ nav {
 
 #nav_links li a button:hover {
   background-color: #52b788;
+}
+#language{
+  margin-left: auto;
 }

@@ -7,6 +7,13 @@ import {HeaderComponent} from "./component/header/header.component";
 import {MainComponent} from "./component/main/main.component";
 import {NavComponent} from "./component/nav/nav.component";
 import { FooterComponent } from './component/footer/footer.component';
+import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
+import {TranslateHttpLoader} from "@ngx-translate/http-loader";
+
+export function HttpLoaderFactory(http:HttpClient){
+  return new  TranslateHttpLoader(http);
+}
 
 @NgModule({
   declarations: [
@@ -18,7 +25,17 @@ import { FooterComponent } from './component/footer/footer.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    HttpClientModule,
+    AppRoutingModule,
+    TranslateModule.forRoot(
+      {
+        loader:{
+          provide:TranslateLoader,
+          useFactory:HttpLoaderFactory,
+          deps:[HttpClient]
+        }
+      }
+    )
   ],
   providers: [],
   bootstrap: [AppComponent]
