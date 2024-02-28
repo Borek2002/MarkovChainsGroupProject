@@ -1,0 +1,40 @@
+nav {
+  background: #081c15;
+  border-radius: 10px;
+  padding: 5px;
+  display: flex;
+  justify-content: space-between; /* Zapewnia odstęp między elementami na obu końcach */
+  align-items: center; /* Opcjonalnie, aby wyśrodkować w pionie */
+  padding: 10px;
+}
+
+#nav_links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#nav_links li {
+  display: inline-block;
+  padding: 0 15px;
+}
+
+#nav_links li a button {
+  padding: 10px 30px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+  background: none;
+  font-size: 95%;
+  color: #d8f3dc;
+  background: #1b4332;
+  text-decoration: none;
+}
+
+#nav_links li a button:hover {
+  background-color: #52b788;
+}
+#language{
+  margin-left: auto;
+}
