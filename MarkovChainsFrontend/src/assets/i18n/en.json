@@ -1,6 +1,10 @@
 {
   "teoria": "Teory",
   "grafy": "Graph",
-  "macierze": "Matrix",
-  "header": "Visualization of Markov Chains"
+  "macierzIWektor": "Matrix and Vector",
+  "header": "Visualization of Markov Chains",
+  "iloscKolumn": "Number of columns",
+  "iloscWierszy": "Number of rows",
+  "macierz": "Matrix",
+  "wektor": "Vector"
 }

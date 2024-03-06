@@ -41,10 +41,10 @@ public class MarkovChainControllerImp implements MarkovChainController {
     }
 
     @Override
-    public ResponseEntity<String> setMatrixAndVector(@RequestBody MarkovRequest request){
+    public ResponseEntity<Void> setMatrixAndVector(@RequestBody MarkovRequest request){
         markovChainService.getMarkovChain().setInitialVector(new ArrayRealVector(request.getInitialVector()));
         markovChainService.getMarkovChain().setTransitionMatrix(new Array2DRowRealMatrix(request.getTransitionMatrix()));
-        return ResponseEntity.ok("Matrix and vector set successfully");
+        return ResponseEntity.noContent().build();
     }
 
 

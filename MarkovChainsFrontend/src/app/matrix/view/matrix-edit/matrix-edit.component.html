@@ -1,0 +1,35 @@
+<h1>{{'macierzIWektor' | translate}}</h1>
+
+<div>
+  <label>{{'iloscKolumn' | translate}}</label>
+  <input type="number" [(ngModel)]="rows" (change)="initializeMatrix()">
+  <br>
+  <label>{{'iloscWierszy' | translate}}</label>
+  <input type="number" [(ngModel)]="cols" (change)="initializeMatrix()">
+</div>
+<br>
+<div>
+  <label>{{'macierz' | translate}}</label>
+  <table id="matrix">
+    <tr *ngFor="let item of matrix; let i = index">
+      <td *ngFor="let field of item| keyvalue;let j = index ">
+        <input type="number" inputmode="none" [(ngModel)]="field.value" (blur)="onCellMatrixBlur(field.value, i, j)">
+      </td>
+    </tr>
+  </table>
+</div>
+<div>
+  <label> {{'wektor' | translate}}</label>
+  <table id="vector">
+    <tr>
+      <td *ngFor="let item of initialVector| keyvalue;let k = index ">
+        <input type="number" inputmode="none" [(ngModel)]="item.value" (blur)="onCellVectorBlur(item.value, k)">
+      </td>
+    </tr>
+  </table>
+  <button (click)="saveChanges()">Zapisz</button>
+</div>
+
+<div>
+  <p id="validationMessage"></p>
+</div>
