@@ -2,5 +2,10 @@
   "teoria": "Teoria",
   "grafy": "Grafy",
   "macierze": "Macierze",
-  "header": "Wizaualizacja Łańcuchów Markova"
+  "header": "Wizaualizacja Łańcuchów Markova",
+  "macierzIWektor": "Macierz i Wektor",
+  "iloscKolumn": "Ilość kolumn",
+  "iloscWierszy": "Ilość wierszy",
+  "macierz": "Macierz",
+  "wektor": "Wektor"
 }

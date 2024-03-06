@@ -8,11 +8,11 @@
         <a><button>{{'grafy' | translate}}</button></a>
       </li>
       <li>
-        <a><button>{{'macierze' | translate}}</button></a>
+        <a><button [routerLink]="'matrix'" >{{'macierze' | translate}}</button></a>
       </li>
     </ul>
   </div>
-  <select id="language" (change)="ChangeLang($event)" name="" id="">
+  <select id="language" (change)="ChangeLang($event)" >
     <option [selected]="lang==='pl'" value="pl">Polski</option>
     <option [selected]="lang==='en'" value="en">English</option>
   </select>

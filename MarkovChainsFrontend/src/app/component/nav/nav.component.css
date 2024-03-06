@@ -35,6 +35,13 @@ nav {
 #nav_links li a button:hover {
   background-color: #52b788;
 }
-#language{
+
+#language {
   margin-left: auto;
+  border-radius: 8px;
+  padding: 5px;
+  font-size: 95%;
+  background: #1b4332;
+  color: #d8f3dc;
 }
+

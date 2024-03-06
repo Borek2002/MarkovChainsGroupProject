@@ -19,5 +19,5 @@ public interface MarkovChainController {
     public int getImmersiveState();
 
     @PutMapping("/markovchain/matrixAndVector")
-    public ResponseEntity<String> setMatrixAndVector(@RequestBody MarkovRequest request);
+    public ResponseEntity<Void> setMatrixAndVector(@RequestBody MarkovRequest request);
 }
