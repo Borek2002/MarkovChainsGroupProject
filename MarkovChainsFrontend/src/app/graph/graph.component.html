@@ -1,0 +1,209 @@
+<mat-drawer-container class="example-container">
+  <mat-drawer mode="side" opened class="sidebar">
+    <h2>Configuration</h2>
+    <form class="settings">
+      <mat-form-field>
+        <mat-select
+          placeholder="Layout"
+          [ngModel]="layout"
+          (ngModelChange)="setLayout($event)"
+          name="layout"
+        >
+          <mat-option *ngFor="let l of layouts" [value]="l.value">
+            {{ l.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-select
+          placeholder="Line Curve Interpolation"
+          [ngModel]="curveType"
+          (ngModelChange)="setInterpolationType($event)"
+          name="curve"
+        >
+          <mat-option
+            *ngFor="let curveType of interpolationTypes"
+            [value]="curveType"
+          >
+            {{ curveType }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-stroked-button
+        color="primary"
+        class="button"
+        (click)="addNode()"
+      >
+        Create Node
+      </button>
+
+      <button
+        mat-stroked-button
+        color="primary"
+        class="button"
+        (click)="addEdge()"
+      >
+        Create Edge
+      </button>
+
+      <mat-checkbox [(ngModel)]="panOnZoom" name="panOnZoom"
+      >Pan while zooming</mat-checkbox
+      >
+
+      <mat-checkbox [(ngModel)]="autoZoom" name="autoZoom"
+      >Auto Zoom
+      </mat-checkbox>
+
+      <mat-checkbox [(ngModel)]="autoCenter" name="autoCenter"
+      >Auto Center
+      </mat-checkbox>
+    </form>
+
+    <button
+      mat-stroked-button
+      color="primary"
+      class="button"
+      (click)="update$.next(true)"
+    >
+      Update
+    </button>
+    <button
+      mat-stroked-button
+      color="primary"
+      class="button"
+      (click)="center$.next(true)"
+    >
+      Center
+    </button>
+    <button
+      mat-stroked-button
+      color="primary"
+      class="button"
+      (click)="zoomToFit$.next(true)"
+    >
+      Zoom to fit
+    </button>
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <div class="page">
+      <ngx-graph
+        [links]="links"
+        [nodes]="nodes"
+        [clusters]="clusters"
+        [layout]="layout"
+        [curve]="curve"
+        [draggingEnabled]="draggingEnabled"
+        [panningEnabled]="panningEnabled"
+        [enableZoom]="zoomEnabled"
+        [zoomSpeed]="zoomSpeed"
+        [minZoomLevel]="minZoomLevel"
+        [maxZoomLevel]="maxZoomLevel"
+        [panOnZoom]="panOnZoom"
+        [autoZoom]="autoZoom"
+        [autoCenter]="autoCenter"
+        [update$]="update$"
+        [center$]="center$"
+        [zoomToFit$]="zoomToFit$"
+      >
+        <ng-template #defsTemplate>
+          <svg:marker
+            id="arrow"
+            viewBox="0 -5 10 10"
+            refX="8"
+            refY="0"
+            markerWidth="4"
+            markerHeight="4"
+            orient="auto"
+          >
+            <svg:path d="M0,-5L10,0L0,5" class="arrow-head" />
+          </svg:marker>
+        </ng-template>
+
+        <ng-template #clusterTemplate let-cluster>
+          <svg:g class="node cluster">
+            <svg:rect
+              rx="5"
+              ry="5"
+              [attr.width]="cluster.dimension.width"
+              [attr.height]="cluster.dimension.height"
+              [attr.fill]="cluster.data.color"
+            />
+          </svg:g>
+        </ng-template>
+
+        <ng-template #nodeTemplate let-node>
+          <svg:g
+            class="node"
+            (click)="onNodeClick(node)"
+            (dblclick)="onNodeDoubleClick(node)"
+          >
+            <svg:rect
+              [attr.width]="node.dimension.width"
+              [attr.height]="node.dimension.height"
+              [attr.fill]="node.data.color"
+            />
+            <svg:text
+              alignment-baseline="central"
+              [attr.x]="10"
+              [attr.y]="node.dimension.height / 2"
+            >
+              {{ node.label }}
+            </svg:text>
+          </svg:g>
+        </ng-template>
+
+        <ng-template #linkTemplate let-link>
+          <svg:g class="edge" (dblclick)="onEdgeDoubleClick(link)">
+            <svg:path
+              class="line"
+              stroke-width="2"
+              marker-end="url(#arrow)"
+            ></svg:path>
+            <svg:text class="edge-label" text-anchor="middle">
+              <textPath
+                class="text-path"
+                [attr.href]="'#' + link.id"
+                [style.dominant-baseline]="link.dominantBaseline"
+                startOffset="50%"
+              >
+                {{ link.label }}
+              </textPath>
+            </svg:text>
+          </svg:g>
+        </ng-template>
+      </ngx-graph>
+    </div>
+    <div
+      *ngIf="selectedNode"
+      [ngStyle]="{
+        position: 'absolute',
+        'left.px': selectedNode.position.x - 100,
+        'top.px': selectedNode.position.y - 40
+      }"
+    >
+      <input
+        type="text"
+        [(ngModel)]="selectedNode.label"
+        (blur)="selectedNode = null"
+      />
+    </div>
+    <div
+      *ngIf="selectedEdge"
+      [ngStyle]="{
+        position: 'absolute',
+        'left.px': selectedEdge.midPoint.x,
+        'top.px': selectedEdge.midPoint.y
+      }"
+    >
+      <input
+        type="text"
+        [(ngModel)]="selectedEdge.label"
+        (blur)="selectedEdge = null"
+      />
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

@@ -11,10 +11,14 @@ import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import { MatrixEditComponent } from './matrix/view/matrix-edit/matrix-edit.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ValidationRowModalComponent } from './matrix/view/validation-row-modal/validation-row-modal.component';
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
+import { GraphComponent } from './graph/graph.component';
+import {NgxGraphModule} from "@swimlane/ngx-graph";
+import {NgxChartsModule} from "@swimlane/ngx-charts";
+import {MaterialModule} from "./graph/material.module";
 
 export function HttpLoaderFactory(http:HttpClient){
   return new  TranslateHttpLoader(http);
@@ -29,11 +33,13 @@ export function HttpLoaderFactory(http:HttpClient){
     FooterComponent,
     MatrixEditComponent,
     ValidationRowModalComponent,
+    GraphComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    ReactiveFormsModule,
     TranslateModule.forRoot(
       {
         loader: {
@@ -45,7 +51,10 @@ export function HttpLoaderFactory(http:HttpClient){
     ),
     FormsModule,
     BrowserAnimationsModule,
-    MatDialogModule
+    MatDialogModule,
+    NgxGraphModule,
+    MaterialModule,
+    NgxChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
