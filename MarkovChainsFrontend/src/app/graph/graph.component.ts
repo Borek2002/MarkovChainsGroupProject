@@ -13,9 +13,12 @@ import {Subject} from "rxjs";
 export class GraphComponent implements OnInit{
   @ViewChild('graphContainer') graphContainer!: ElementRef;
 
+  protected readonly Math = Math;
+
   nodes: Node[] = nodes;
   clusters: ClusterNode[] = clusters;
   links: Edge[] = links;
+
 
   constructor(private cdr: ChangeDetectorRef) {}
 
@@ -42,19 +45,14 @@ export class GraphComponent implements OnInit{
   ];
 
   // line interpolation
-  curveType: string = 'Bundle';
-  curve: any = shape.curveLinear;
+  curveType: string = 'curveNatural';
+  curve: any = shape.curveNatural;
   interpolationTypes = [
     'Bundle',
     'Cardinal',
     'Catmull Rom',
-    'Linear',
     'Monotone X',
-    'Monotone Y',
     'Natural',
-    'Step',
-    'Step After',
-    'Step Before',
   ];
 
   draggingEnabled: boolean = true;
@@ -68,7 +66,7 @@ export class GraphComponent implements OnInit{
   panOnZoom: boolean = true;
 
   autoZoom: boolean = false;
-  autoCenter: boolean = false;
+  autoCenter: boolean = true;
 
   update$: Subject<boolean> = new Subject();
   center$: Subject<boolean> = new Subject();
@@ -80,8 +78,37 @@ export class GraphComponent implements OnInit{
   selectedNode: Node | null = null;
   selectedEdge: Edge | null = null;
 
+  // Deklaracja zmiennych dla operacji przeciągania
+  private dragging: boolean = false;
+  private lastDraggedPosition: [number, number] = [0, 0];
+
+  // Deklaracja obiektu Subject do wywoływania aktualizacji widoku
+  private updateGraph$: Subject<boolean> = new Subject<boolean>();
+
+
   ngOnInit() {
     this.setInterpolationType(this.curveType);
+  }
+
+  // Funkcja wywoływana przy rozpoczęciu operacji przeciągania
+  onDraggingStart(event: any): void {
+    this.dragging = true;
+    // Tutaj możesz wykonać dodatkowe operacje na początku przeciągania
+  }
+
+  // Funkcja wywoływana w trakcie operacji przeciągania węzła
+  onDraggingNode(event: any): void {
+    // Tutaj możesz wykonać dodatkowe operacje podczas przeciągania węzła
+    this.updateGraph$.next(true);
+  }
+
+  // Funkcja wywoływana po zakończeniu operacji przeciągania
+  onDraggingEnd(event: any): void {
+    this.dragging = false;
+    // Zapamiętaj ostatnią pozycję, w której został przeciągnięty graf
+    this.lastDraggedPosition = [event.transform.x, event.transform.y];
+    // Wywołaj aktualizację widoku po przeciągnięciu grafu
+    this.updateGraph$.next(true);
   }
 
   setInterpolationType(curveType:any) {
@@ -95,26 +122,11 @@ export class GraphComponent implements OnInit{
     if (curveType === 'Catmull Rom') {
       this.curve = shape.curveCatmullRom;
     }
-    if (curveType === 'Linear') {
-      this.curve = shape.curveLinear;
-    }
     if (curveType === 'Monotone X') {
       this.curve = shape.curveMonotoneX;
     }
-    if (curveType === 'Monotone Y') {
-      this.curve = shape.curveMonotoneY;
-    }
     if (curveType === 'Natural') {
       this.curve = shape.curveNatural;
-    }
-    if (curveType === 'Step') {
-      this.curve = shape.curveStep;
-    }
-    if (curveType === 'Step After') {
-      this.curve = shape.curveStepAfter;
-    }
-    if (curveType === 'Step Before') {
-      this.curve = shape.curveStepBefore;
     }
   }
 
@@ -136,8 +148,8 @@ export class GraphComponent implements OnInit{
 
     // Dodaj nowy węzeł do struktury danych
     const newNode: Node = {
-      id: 'node' + (this.nodes.length + 1),
-      label: 'New Node',
+      id: '' + (this.nodes.length + 1),
+      label: 'S',
       //position: { x: xPos, y: yPos },
     };
     this.nodes.push(newNode);
@@ -153,10 +165,9 @@ export class GraphComponent implements OnInit{
       if (!this.selectedSourceNode) {
         // Ustaw bieżący węzeł jako źródło
         this.selectedSourceNode = node;
-      } else if (
-        !this.selectedTargetNode &&
-        this.selectedSourceNode.id !== node.id
-      ) {
+      }
+      else
+      {
         // Ustaw bieżący węzeł jako cel, jeśli różni się od źródła
         this.selectedTargetNode = node;
 
@@ -181,9 +192,18 @@ export class GraphComponent implements OnInit{
     this.selectedNode = node;
   }
 
+  onNodeMouseEnter(node: Node){
+    node.data.hover = true;
+  }
+
+  onNodeMouseLeave(node: Node){
+    node.data.hover = false;
+  }
+
   onEdgeDoubleClick(edge: Edge) {
     this.selectedEdge = edge;
   }
+
 
   updateNodeLabel(newLabel: string) {
     if (this.selectedNode) {
@@ -198,4 +218,10 @@ export class GraphComponent implements OnInit{
       this.selectedEdge = null;
     }
   }
+
+  getLineWidth(label: string): number {
+    const numberValue: number = parseFloat(label);
+    return numberValue * 5; // Przykładowa konwersja: przemnożenie przez 5
+  }
+
 }

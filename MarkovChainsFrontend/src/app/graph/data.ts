@@ -1,21 +1,22 @@
 import { Edge, Node, ClusterNode } from '@swimlane/ngx-graph';
+import {color} from "d3";
 
 export const nodes: Node[] = [
   {
-    id: 'first',
-    label: 'A',
+    id: '1',
+    label: 'S',
   },
   {
-    id: 'second',
-    label: 'B',
+    id: '2',
+    label: 'S',
   },
   {
-    id: 'c1',
-    label: 'C1',
+    id: '3',
+    label: 'S',
   },
   {
-    id: 'c2',
-    label: 'C2',
+    id: '4',
+    label: 'S',
   },
 ];
 
@@ -24,27 +25,27 @@ export const clusters: ClusterNode[] = [
 
 export const links: Edge[] = [
   {
-    id: 'a',
-    source: 'second',
-    target: 'first',
-    label: 'is parent of',
+    id: 'E1',
+    source: '2',
+    target: '1',
+    label: '0.4',
   },
   {
-    id: 'b',
-    source: 'first',
-    target: 'c1',
-    label: 'placeholder',
+    id: 'E2',
+    source: '1',
+    target: '3',
+    label: '0.5',
   },
   {
-    id: 'c',
-    source: 'first',
-    target: 'c1',
-    label: 'custom label',
+    id: 'E3',
+    source: '1',
+    target: '3',
+    label: '0.1',
   },
   {
-    id: 'd',
-    source: 'first',
-    target: 'c2',
-    label: 'custom label',
+    id: 'E4',
+    source: '1',
+    target: '4',
+    label: '0.3',
   },
 ];

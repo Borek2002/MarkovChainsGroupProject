@@ -4,19 +4,6 @@
     <form class="settings">
       <mat-form-field>
         <mat-select
-          placeholder="Layout"
-          [ngModel]="layout"
-          (ngModelChange)="setLayout($event)"
-          name="layout"
-        >
-          <mat-option *ngFor="let l of layouts" [value]="l.value">
-            {{ l.label }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-select
           placeholder="Line Curve Interpolation"
           [ngModel]="curveType"
           (ngModelChange)="setInterpolationType($event)"
@@ -31,6 +18,19 @@
         </mat-select>
       </mat-form-field>
 
+      <mat-checkbox [(ngModel)]="panOnZoom" name="panOnZoom"
+      >Pan while zooming</mat-checkbox
+      >
+
+      <mat-checkbox [(ngModel)]="autoZoom" name="autoZoom"
+      >Auto Zoom
+      </mat-checkbox>
+
+      <mat-checkbox [(ngModel)]="autoCenter" name="autoCenter"
+      >Auto Center
+      </mat-checkbox>
+    </form>
+    <div class="node-buttons">
       <button
         mat-stroked-button
         color="primary"
@@ -48,19 +48,7 @@
       >
         Create Edge
       </button>
-
-      <mat-checkbox [(ngModel)]="panOnZoom" name="panOnZoom"
-      >Pan while zooming</mat-checkbox
-      >
-
-      <mat-checkbox [(ngModel)]="autoZoom" name="autoZoom"
-      >Auto Zoom
-      </mat-checkbox>
-
-      <mat-checkbox [(ngModel)]="autoCenter" name="autoCenter"
-      >Auto Center
-      </mat-checkbox>
-    </form>
+    </div>
 
     <button
       mat-stroked-button
@@ -108,6 +96,8 @@
         [update$]="update$"
         [center$]="center$"
         [zoomToFit$]="zoomToFit$"
+        (dragstart)="onDraggingStart($event)"
+        (dragend)="onDraggingEnd($event)"
       >
         <ng-template #defsTemplate>
           <svg:marker
@@ -140,18 +130,23 @@
             class="node"
             (click)="onNodeClick(node)"
             (dblclick)="onNodeDoubleClick(node)"
+            (mouseenter)="onNodeMouseEnter(node)"
+            (mouseleave)="onNodeMouseLeave(node)"
           >
-            <svg:rect
-              [attr.width]="node.dimension.width"
-              [attr.height]="node.dimension.height"
+            <svg:circle
+              [attr.cx]="node.dimension.width/2"
+              [attr.cy]="node.dimension.height/2"
+              [attr.r]="Math.max(node.dimension.width, node.dimension.height) / 2"
               [attr.fill]="node.data.color"
+              [attr.stroke]="node.data.hover ? 'green' : 'none'"
+              stroke-width="3"
             />
             <svg:text
               alignment-baseline="central"
               [attr.x]="10"
               [attr.y]="node.dimension.height / 2"
             >
-              {{ node.label }}
+              {{ node.label }}<tspan baseline-shift="sub" [innerHTML]="node.id"></tspan>
             </svg:text>
           </svg:g>
         </ng-template>
@@ -160,7 +155,7 @@
           <svg:g class="edge" (dblclick)="onEdgeDoubleClick(link)">
             <svg:path
               class="line"
-              stroke-width="2"
+              [attr.stroke-width]="getLineWidth(link.label)"
               marker-end="url(#arrow)"
             ></svg:path>
             <svg:text class="edge-label" text-anchor="middle">

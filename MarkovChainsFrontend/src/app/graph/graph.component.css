@@ -31,3 +31,7 @@ mat-checkbox {
 .button {
   margin: 3px;
 }
+
+.node-buttons{
+  display:block;
+}
