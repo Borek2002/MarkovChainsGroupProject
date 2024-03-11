@@ -35,3 +35,11 @@ mat-checkbox {
 .node-buttons{
   display:block;
 }
+
+.sidebar-toggle-button {
+  position: absolute;
+  right: 0;
+  top: 5%;
+  transform: translateY(-50%);
+  z-index: 999;
+}

@@ -32,6 +32,20 @@ nav {
   text-decoration: none;
 }
 
+.menu-button{
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+  background: none;
+  font-size: 95%;
+  color: #d8f3dc;
+  background: #1b4332;
+  text-decoration: none;
+}
+
+.menu-button:hover{
+  background-color: #52b788;
+}
+
 #nav_links li a button:hover {
   background-color: #52b788;
 }

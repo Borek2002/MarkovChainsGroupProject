@@ -4,6 +4,7 @@ import * as shape from 'd3-shape';
 import {transition} from "d3-transition";
 import { Edge, Node, ClusterNode, Layout } from '@swimlane/ngx-graph';
 import {Subject} from "rxjs";
+import {NavService} from "../component/nav/nav.service";
 
 @Component({
   selector: 'app-graph',
@@ -12,7 +13,7 @@ import {Subject} from "rxjs";
 })
 export class GraphComponent implements OnInit{
   @ViewChild('graphContainer') graphContainer!: ElementRef;
-
+  sidebarOpened: boolean = true;
   protected readonly Math = Math;
 
   nodes: Node[] = nodes;
@@ -20,7 +21,12 @@ export class GraphComponent implements OnInit{
   links: Edge[] = links;
 
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef, private navService: NavService) {}
+
+  toggleSidebar() {
+    console.log("dzialam");
+    this.sidebarOpened = !this.sidebarOpened;
+  }
 
   layout: string | Layout = 'dagre';
   layouts: any[] = [
@@ -88,6 +94,9 @@ export class GraphComponent implements OnInit{
 
   ngOnInit() {
     this.setInterpolationType(this.curveType);
+    this.navService.toggleSidebarEvent.subscribe(() => {
+      this.toggleSidebar();
+    });
   }
 
   // Funkcja wywoływana przy rozpoczęciu operacji przeciągania

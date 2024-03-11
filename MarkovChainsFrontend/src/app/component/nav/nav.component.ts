@@ -1,5 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {TranslateService} from "@ngx-translate/core";
+import {NavService} from "./nav.service";
 
 @Component({
   selector: 'app-nav',
@@ -8,16 +9,19 @@ import {TranslateService} from "@ngx-translate/core";
 })
 export class NavComponent implements OnInit{
   lang:string ='';
+  @Output() toggleSidebarEvent = new EventEmitter<void>();
 
-  constructor(private translateService:TranslateService){
+  constructor(private translateService:TranslateService, private navService: NavService){
 
   }
 
   ngOnInit(): void {
     this.lang = localStorage.getItem('lang') || 'pl';
-
   }
 
+  toggleSidebar(){
+    this.navService.toggleSidebar();
+  }
   ChangeLang(lang:any){
     const selectedLanguage = lang.target.value;
 

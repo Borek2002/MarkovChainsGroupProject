@@ -1,5 +1,5 @@
 <mat-drawer-container class="example-container">
-  <mat-drawer mode="side" opened class="sidebar">
+  <mat-drawer #drawer mode="side" class="sidebar" [opened]="sidebarOpened">
     <h2>Configuration</h2>
     <form class="settings">
       <mat-form-field>
@@ -74,8 +74,8 @@
     >
       Zoom to fit
     </button>
+    <app-matrix-edit></app-matrix-edit>
   </mat-drawer>
-
   <mat-drawer-content>
     <div class="page">
       <ngx-graph
