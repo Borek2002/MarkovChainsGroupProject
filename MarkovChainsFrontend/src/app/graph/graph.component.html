@@ -96,8 +96,16 @@
         [update$]="update$"
         [center$]="center$"
         [zoomToFit$]="zoomToFit$"
-        (dragstart)="onDraggingStart($event)"
-        (dragend)="onDraggingEnd($event)"
+        [layoutSettings]="{
+          orientation: 'LR',
+          marginX: 5,
+          marginY: 5,
+          edgePadding: 100,
+          rankPadding: 20,
+          nodePadding: 5,
+          multigraph: true,
+          compound: true,
+        }"
       >
         <ng-template #defsTemplate>
           <svg:marker
@@ -132,6 +140,8 @@
             (dblclick)="onNodeDoubleClick(node)"
             (mouseenter)="onNodeMouseEnter(node)"
             (mouseleave)="onNodeMouseLeave(node)"
+            (dragstart)="onDraggingStart($event)"
+            (dragend)="onDraggingEnd($event)"
           >
             <svg:circle
               [attr.cx]="node.dimension.width/2"

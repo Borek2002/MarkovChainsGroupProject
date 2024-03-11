@@ -28,7 +28,7 @@ export class GraphComponent implements OnInit{
     this.sidebarOpened = !this.sidebarOpened;
   }
 
-  layout: string | Layout = 'dagre';
+  layout: string | Layout = 'dagreNodesOnly';
   layouts: any[] = [
     {
       label: 'Dagre',
@@ -51,8 +51,8 @@ export class GraphComponent implements OnInit{
   ];
 
   // line interpolation
-  curveType: string = 'curveNatural';
-  curve: any = shape.curveNatural;
+  curveType: string = 'curveBundle';
+  curve: any = shape.curveBundle;
   interpolationTypes = [
     'Bundle',
     'Cardinal',
@@ -90,7 +90,7 @@ export class GraphComponent implements OnInit{
 
   // Deklaracja obiektu Subject do wywoływania aktualizacji widoku
   private updateGraph$: Subject<boolean> = new Subject<boolean>();
-
+  
 
   ngOnInit() {
     this.setInterpolationType(this.curveType);
@@ -102,21 +102,17 @@ export class GraphComponent implements OnInit{
   // Funkcja wywoływana przy rozpoczęciu operacji przeciągania
   onDraggingStart(event: any): void {
     this.dragging = true;
-    // Tutaj możesz wykonać dodatkowe operacje na początku przeciągania
+    console.log("poczatek przesuwania")
   }
 
   // Funkcja wywoływana w trakcie operacji przeciągania węzła
   onDraggingNode(event: any): void {
-    // Tutaj możesz wykonać dodatkowe operacje podczas przeciągania węzła
     this.updateGraph$.next(true);
   }
 
-  // Funkcja wywoływana po zakończeniu operacji przeciągania
   onDraggingEnd(event: any): void {
     this.dragging = false;
-    // Zapamiętaj ostatnią pozycję, w której został przeciągnięty graf
     this.lastDraggedPosition = [event.transform.x, event.transform.y];
-    // Wywołaj aktualizację widoku po przeciągnięciu grafu
     this.updateGraph$.next(true);
   }
 
@@ -174,6 +170,7 @@ export class GraphComponent implements OnInit{
       if (!this.selectedSourceNode) {
         // Ustaw bieżący węzeł jako źródło
         this.selectedSourceNode = node;
+        this.selectedSourceNode.data.color = '#069d0c';
       }
       else
       {
@@ -230,7 +227,7 @@ export class GraphComponent implements OnInit{
 
   getLineWidth(label: string): number {
     const numberValue: number = parseFloat(label);
-    return numberValue * 5; // Przykładowa konwersja: przemnożenie przez 5
+    return numberValue * 5;
   }
 
 }
