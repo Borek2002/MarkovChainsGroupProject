@@ -1,79 +1,71 @@
 <mat-drawer-container class="example-container">
   <mat-drawer #drawer mode="side" class="sidebar" [opened]="sidebarOpened">
     <h2>Configuration</h2>
-    <form class="settings">
-      <mat-form-field>
-        <mat-select
-          placeholder="Line Curve Interpolation"
-          [ngModel]="curveType"
-          (ngModelChange)="setInterpolationType($event)"
-          name="curve"
-        >
-          <mat-option
-            *ngFor="let curveType of interpolationTypes"
-            [value]="curveType"
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Settings</mat-panel-title>
+        <mat-icon>settings</mat-icon>
+      </mat-expansion-panel-header>
+      <form class="settings">
+        <mat-form-field>
+          <mat-select
+            placeholder="Line Curve Interpolation"
+            [ngModel]="curveType"
+            (ngModelChange)="setInterpolationType($event)"
+            name="curve"
           >
-            {{ curveType }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+            <mat-option
+              *ngFor="let curveType of interpolationTypes"
+              [value]="curveType"
+            >
+              {{ curveType }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-      <mat-checkbox [(ngModel)]="panOnZoom" name="panOnZoom"
-      >Pan while zooming</mat-checkbox
-      >
+        <mat-checkbox [(ngModel)]="panOnZoom" name="panOnZoom"
+        >Pan while zooming</mat-checkbox
+        >
 
-      <mat-checkbox [(ngModel)]="autoZoom" name="autoZoom"
-      >Auto Zoom
-      </mat-checkbox>
+        <mat-checkbox [(ngModel)]="autoZoom" name="autoZoom"
+        >Auto Zoom
+        </mat-checkbox>
 
-      <mat-checkbox [(ngModel)]="autoCenter" name="autoCenter"
-      >Auto Center
-      </mat-checkbox>
-    </form>
-    <div class="node-buttons">
-      <button
-        mat-stroked-button
-        color="primary"
-        class="button"
-        (click)="addNode()"
-      >
-        Create Node
-      </button>
+        <mat-checkbox [(ngModel)]="autoCenter" name="autoCenter"
+        >Auto Center
+        </mat-checkbox>
+      </form>
+    </mat-expansion-panel>
+    <div class="button-container">
+      <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <button mat-raised-button color="primary" class="button" (click)="addNode()">
+            Create Node
+          </button>
+          <button mat-raised-button color="primary" class="button" (click)="addEdge()">
+            Create Edge
+          </button>
+        </div>
+      </div>
 
-      <button
-        mat-stroked-button
-        color="primary"
-        class="button"
-        (click)="addEdge()"
-      >
-        Create Edge
-      </button>
+      <div class="row">
+        <div class="col-md-4">
+        <button mat-stroked-button color="primary" class="button" (click)="update$.next(true)">
+          Update
+        </button>
+        </div>
+        <div class="col-md-4">
+          <button mat-stroked-button color="primary" class="button" (click)="center$.next(true)">
+            Center
+          </button>
+        </div>
+        <div class="col-md-4">
+          <button mat-stroked-button color="primary" class="button" (click)="zoomToFit$.next(true)">
+            Zoom to fit
+          </button>
+        </div>
+      </div>
     </div>
-
-    <button
-      mat-stroked-button
-      color="primary"
-      class="button"
-      (click)="update$.next(true)"
-    >
-      Update
-    </button>
-    <button
-      mat-stroked-button
-      color="primary"
-      class="button"
-      (click)="center$.next(true)"
-    >
-      Center
-    </button>
-    <button
-      mat-stroked-button
-      color="primary"
-      class="button"
-      (click)="zoomToFit$.next(true)"
-    >
-      Zoom to fit
-    </button>
     <app-matrix-edit></app-matrix-edit>
   </mat-drawer>
   <mat-drawer-content>

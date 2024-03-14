@@ -1,8 +1,6 @@
 import {ChangeDetectorRef, Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import { nodes, clusters, links } from './data';
 import * as shape from 'd3-shape';
-import 'd3-transition';
-//import {transition} from "d3-transition";
 import { Edge, Node, ClusterNode, Layout } from '@swimlane/ngx-graph';
 import {Subject} from "rxjs";
 import {NavService} from "../component/nav/nav.service";

@@ -43,3 +43,8 @@ mat-checkbox {
   transform: translateY(-50%);
   z-index: 999;
 }
+
+.button-container .row {
+  display: flex;
+  align-items: stretch;
+}
