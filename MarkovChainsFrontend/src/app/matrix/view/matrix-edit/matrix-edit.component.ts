@@ -82,4 +82,16 @@ export class MatrixEditComponent {
         console.error('Błąd podczas wysyłania danych na serwer.', error);
       });
   }
+
+  moveMatrixFocus(rowIndex: number, colIndex: number, event: KeyboardEvent): void {
+    event.preventDefault();
+    if (rowIndex >= 0 && rowIndex < this.matrix.length && colIndex >= 0 && colIndex < this.matrix[0].length) {
+      console.log("dzialam")
+      const inputId = 'matrixInput_' + rowIndex + '_' + colIndex;
+      const inputElement = document.getElementById(inputId) as HTMLInputElement;
+      if (inputElement) {
+        inputElement.focus();
+      }
+    }
+  }
 }

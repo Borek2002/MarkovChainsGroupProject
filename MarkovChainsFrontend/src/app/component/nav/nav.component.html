@@ -2,10 +2,15 @@
   <div>
     <ul id="nav_links">
       <li>
+        <button (click)="toggleSidebar()" class="menu-button" mat-icon-button>
+          <mat-icon>menu</mat-icon>
+        </button>
+      </li>
+      <li>
         <a><button>{{'teoria' | translate}}</button></a>
       </li>
       <li>
-        <a><button>{{'grafy' | translate}}</button></a>
+        <a><button [routerLink]="'graph'">{{'grafy' | translate}}</button></a>
       </li>
       <li>
         <a><button [routerLink]="'matrix'" >{{'macierze' | translate}}</button></a>

@@ -13,7 +13,12 @@
   <table id="matrix">
     <tr *ngFor="let item of matrix; let i = index">
       <td *ngFor="let field of item| keyvalue;let j = index ">
-        <input type="number" inputmode="none" [(ngModel)]="field.value" (blur)="onCellMatrixBlur(field.value, i, j)">
+        <input type="number" inputmode="none" [(ngModel)]="field.value" (blur)="onCellMatrixBlur(field.value, i, j)"
+               [attr.id]="'matrixInput_' + i + '_' + j"
+               (keydown.arrowdown)="moveMatrixFocus(i + 1, j, $event)"
+               (keydown.arrowup)="moveMatrixFocus(i - 1, j, $event)"
+               (keydown.arrowleft)="moveMatrixFocus(i, j - 1, $event)"
+               (keydown.arrowright)="moveMatrixFocus(i, j + 1, $event)">
       </td>
     </tr>
   </table>
