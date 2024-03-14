@@ -1,7 +1,8 @@
 import {ChangeDetectorRef, Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import { nodes, clusters, links } from './data';
 import * as shape from 'd3-shape';
-import {transition} from "d3-transition";
+import 'd3-transition';
+//import {transition} from "d3-transition";
 import { Edge, Node, ClusterNode, Layout } from '@swimlane/ngx-graph';
 import {Subject} from "rxjs";
 import {NavService} from "../component/nav/nav.service";
@@ -90,7 +91,7 @@ export class GraphComponent implements OnInit{
 
   // Deklaracja obiektu Subject do wywoływania aktualizacji widoku
   private updateGraph$: Subject<boolean> = new Subject<boolean>();
-  
+
 
   ngOnInit() {
     this.setInterpolationType(this.curveType);

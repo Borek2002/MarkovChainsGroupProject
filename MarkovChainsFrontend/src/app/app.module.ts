@@ -17,7 +17,6 @@ import { ValidationRowModalComponent } from './matrix/view/validation-row-modal/
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 import { GraphComponent } from './graph/graph.component';
 import {NgxGraphModule} from "@swimlane/ngx-graph";
-import {NgxChartsModule} from "@swimlane/ngx-charts";
 import {MaterialModule} from "./graph/material.module";
 
 export function HttpLoaderFactory(http:HttpClient){
@@ -53,8 +52,7 @@ export function HttpLoaderFactory(http:HttpClient){
     BrowserAnimationsModule,
     MatDialogModule,
     NgxGraphModule,
-    MaterialModule,
-    NgxChartsModule
+    MaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]
