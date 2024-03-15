@@ -4,6 +4,7 @@ import * as shape from 'd3-shape';
 import { Edge, Node, ClusterNode, Layout } from '@swimlane/ngx-graph';
 import {Subject} from "rxjs";
 import {NavService} from "../component/nav/nav.service";
+import {MatrixEditComponent} from "../matrix/view/matrix-edit/matrix-edit.component";
 
 @Component({
   selector: 'app-graph',
@@ -18,9 +19,18 @@ export class GraphComponent implements OnInit{
   nodes: Node[] = nodes;
   clusters: ClusterNode[] = clusters;
   links: Edge[] = links;
-
-
   constructor(private cdr: ChangeDetectorRef, private navService: NavService) {}
+
+  updateNodes(nodes: any[]) {
+    this.nodes = nodes;
+    // Optionally, perform any additional logic if needed
+  }
+
+  // Method to handle links updated event
+  updateLinks(links: any[]) {
+    this.links = links;
+    // Optionally, perform any additional logic if needed
+  }
 
   toggleSidebar() {
     console.log("dzialam");
