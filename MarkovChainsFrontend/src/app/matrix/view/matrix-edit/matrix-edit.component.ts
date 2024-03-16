@@ -41,14 +41,13 @@ export class MatrixEditComponent {
   }
 
   saveChanges() {
-    this.validateMatrixRowSumToOne();
-
+    if (this.validateMatrixRowSumToOne()) {
     console.log("Zapisano zmiany: ", this.matrix);
-
     this.sendMatrixAndInitialVectorToBackend();
+    }
   }
 
-  validateMatrixRowSumToOne(){
+  validateMatrixRowSumToOne():boolean{
     let isValid = true;
     for (let i = 0; i < this.rows; i++) {
       const rowSum = this.matrix[i].reduce((sum, value) => sum + value, 0);
@@ -62,8 +61,8 @@ export class MatrixEditComponent {
       this.dialog.open(ValidationRowModalComponent, {
         data: { title: 'Błąd walidacji', message: 'Proszę poprawić macierz, aby suma każdego wiersza wynosiła 1.' }
       });
-      return;
     }
+    return isValid;
   }
 
   sendMatrixAndInitialVectorToBackend(){
@@ -88,6 +87,18 @@ export class MatrixEditComponent {
     if (rowIndex >= 0 && rowIndex < this.matrix.length && colIndex >= 0 && colIndex < this.matrix[0].length) {
       console.log("dzialam")
       const inputId = 'matrixInput_' + rowIndex + '_' + colIndex;
+      const inputElement = document.getElementById(inputId) as HTMLInputElement;
+      if (inputElement) {
+        inputElement.focus();
+      }
+    }
+  }
+
+  moveVectorFocus(colIndex: number, event: KeyboardEvent): void {
+    event.preventDefault();
+    if (colIndex >= 0 && colIndex < this.matrix.length) {
+      console.log("dzialam")
+      const inputId = 'vectorInput_' + colIndex;
       const inputElement = document.getElementById(inputId) as HTMLInputElement;
       if (inputElement) {
         inputElement.focus();
