@@ -1,10 +1,14 @@
 {
   "teoria": "Teory",
   "grafy": "Graph",
-  "macierzIWektor": "Matrix and Vector",
+  "macierze": "Matrices",
   "header": "Visualization of Markov Chains",
-  "iloscKolumn": "Number of columns",
-  "iloscWierszy": "Number of rows",
+  "macierzIWektor": "Matrix and Vector",
+  "iloscKolumnIWierszy": "Number of columns and rows",
   "macierz": "Matrix",
-  "wektor": "Vector"
+  "wektor": "Vector",
+  "obliczPrawdopodobienstwoFinalne": "Calculate final probability",
+  "obliczPrawdopodobieństwoPoNKrokach": "Calculate probability after n steps",
+  "obliczPrawdopodobieństwoStacjonarne": "Calculate stationary probability",
+  "stanPochlaniajacy": "Immersive state"
 }

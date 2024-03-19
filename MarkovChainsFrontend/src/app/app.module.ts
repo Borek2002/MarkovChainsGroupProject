@@ -18,6 +18,7 @@ import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 import { GraphComponent } from './graph/graph.component';
 import {NgxGraphModule} from "@swimlane/ngx-graph";
 import {MaterialModule} from "./graph/material.module";
+import {MatrixAndVectorService} from "./matrix/service/matrix-and-vector-service";
 
 export function HttpLoaderFactory(http:HttpClient){
   return new  TranslateHttpLoader(http);
@@ -54,7 +55,7 @@ export function HttpLoaderFactory(http:HttpClient){
     NgxGraphModule,
     MaterialModule
   ],
-  providers: [],
+  providers: [MatrixAndVectorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
