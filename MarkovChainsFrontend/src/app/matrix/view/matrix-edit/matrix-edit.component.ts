@@ -4,25 +4,32 @@ import {MatDialog} from "@angular/material/dialog";
 import {ValidationRowModalComponent} from "../validation-row-modal/validation-row-modal.component";
 import {MatrixAndVector} from "../../model/matrixAndVector";
 import {MatrixAndVectorService} from "../../service/matrix-and-vector-service";
-import {Observable, tap} from "rxjs";
+
 
 @Component({
   selector: 'app-matrix-edit',
   templateUrl: './matrix-edit.component.html',
   styleUrls: ['./matrix-edit.component.css']
 })
-export class MatrixEditComponent {
+export class MatrixEditComponent implements OnInit{
   rowsAndColumns: number = 3;
-  data: MatrixAndVector = { transitionMatrix:[], initialVector:[]};
+  data: MatrixAndVector = {transitionMatrix: [], initialVector: []};
   finalProbability: number[] = [];
+  probabilityAfterNSteps: number[] = [];
+  stationaryProbability: number[] = [];
+
   constructor(private matrixAndVectorService: MatrixAndVectorService,
-              public dialog: MatDialog ) {
+              public dialog: MatDialog) {
     this.initializeMatrix();
+  }
+
+  ngOnInit(): void {
+
   }
 
   initializeMatrix() {
     this.data.transitionMatrix = [];
-    this.data.initialVector=[]
+    this.data.initialVector = []
     for (let i = 0; i < this.rowsAndColumns; i++) {
       let row = [];
       for (let j = 0; j < this.rowsAndColumns; j++) {
@@ -34,8 +41,8 @@ export class MatrixEditComponent {
   }
 
   onCellMatrixBlur(value: any, rowIndex: number, colIndex: number) {
-      this.data.transitionMatrix[rowIndex][colIndex] = value;
-      console.log(value)
+    this.data.transitionMatrix[rowIndex][colIndex] = value;
+    console.log(value)
   }
 
   onCellVectorBlur(value: any, colIndex: number) {
@@ -57,22 +64,22 @@ export class MatrixEditComponent {
     }
   }
 
-  onFinalProbability(){
+  onFinalProbability() {
     this.matrixAndVectorService.getFinalProbability()
-      .pipe(
-        tap(data => {
-          this.finalProbability = data; // Ustawia otrzymane dane jako ostateczne prawdopodobieństwo
-        })
-      )
-      .subscribe({
-        error: error => {
-          console.error('An error occurred:', error);
-          // Obsługa błędów
-        }
-      });
+      .subscribe(result => this.finalProbability = result);
   }
 
-  validateMatrixRowSumToOne():boolean{
+  onProbabilityAfterNSteps() {
+    this.matrixAndVectorService.getProbabilityAfterNSteps()
+      .subscribe(result => this.probabilityAfterNSteps = result);
+  }
+
+  onStationaryProbability() {
+    this.matrixAndVectorService.getStationaryProbability()
+      .subscribe(result => this.stationaryProbability = result);
+  }
+
+  validateMatrixRowSumToOne(): boolean {
     let isValid = true;
     for (let i = 0; i < this.rowsAndColumns; i++) {
       const rowSum = this.data.transitionMatrix[i].reduce((sum, value) => sum + value, 0);
@@ -83,7 +90,7 @@ export class MatrixEditComponent {
     }
     if (!isValid) {
       this.dialog.open(ValidationRowModalComponent, {
-        data: { title: 'Błąd walidacji', message: 'Proszę poprawić macierz, aby suma każdego wiersza wynosiła 1.' }
+        data: {title: 'Błąd walidacji', message: 'Proszę poprawić macierz, aby suma każdego wiersza wynosiła 1.'}
       });
     }
     return isValid;
@@ -113,4 +120,5 @@ export class MatrixEditComponent {
       }
     }
   }
+
 }
