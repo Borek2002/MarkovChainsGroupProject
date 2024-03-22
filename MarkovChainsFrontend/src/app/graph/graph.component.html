@@ -91,16 +91,6 @@
         [update$]="update$"
         [center$]="center$"
         [zoomToFit$]="zoomToFit$"
-        [layoutSettings]="{
-          orientation: 'LR',
-          marginX: 5,
-          marginY: 5,
-          edgePadding: 100,
-          rankPadding: 20,
-          nodePadding: 5,
-          multigraph: true,
-          compound: true,
-        }"
       >
         <ng-template #defsTemplate>
           <svg:marker
@@ -181,8 +171,8 @@
       *ngIf="selectedNode"
       [ngStyle]="{
         position: 'absolute',
-        'left.px': selectedNode.position.x - 100,
-        'top.px': selectedNode.position.y - 40
+        'left.px': selectedNode.position.x,
+        'top.px': selectedNode.position.y
       }"
     >
       <input

@@ -1,7 +1,16 @@
 import {ChangeDetectorRef, Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import { nodes, clusters, links } from './data';
 import * as shape from 'd3-shape';
-import { Edge, Node, ClusterNode, Layout } from '@swimlane/ngx-graph';
+import {
+  Edge,
+  Node,
+  ClusterNode,
+  Layout,
+  DagreLayout,
+  DagreNodesOnlyLayout,
+  Graph,
+  D3ForceDirectedLayout, ColaForceDirectedLayout
+} from '@swimlane/ngx-graph';
 import {Subject} from "rxjs";
 import {NavService} from "../component/nav/nav.service";
 import {MatrixEditComponent} from "../matrix/view/matrix-edit/matrix-edit.component";
@@ -33,11 +42,11 @@ export class GraphComponent implements OnInit{
   }
 
   toggleSidebar() {
-    console.log("dzialam");
     this.sidebarOpened = !this.sidebarOpened;
   }
 
-  layout: string | Layout = 'dagreNodesOnly';
+  layout: string | Layout = 'd3ForceDirected';
+
   layouts: any[] = [
     {
       label: 'Dagre',
@@ -78,10 +87,11 @@ export class GraphComponent implements OnInit{
   zoomSpeed: number = 0.1;
   minZoomLevel: number = 0.1;
   maxZoomLevel: number = 4.0;
-  panOnZoom: boolean = true;
 
+
+  panOnZoom: boolean = false;
   autoZoom: boolean = false;
-  autoCenter: boolean = true;
+  autoCenter: boolean = false;
 
   update$: Subject<boolean> = new Subject();
   center$: Subject<boolean> = new Subject();
