@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import { nodes, clusters, links } from './data';
+import { nodes, clusters, links } from './graph-data';
 import * as shape from 'd3-shape';
 import {
   Edge,
@@ -165,11 +165,6 @@ export class GraphComponent implements OnInit{
   }
 
   addNode() {
-    /*if (this.isAddNodeEnabled) {
-      // Pobierz pozycję kliknięcia myszką względem elementu, na którym wystąpiło zdarzenie
-      const xPos = event.offsetX;
-      const yPos = event.offsetY;*/
-
     // Dodaj nowy węzeł do struktury danych
     const newNode: Node = {
       id: '' + (this.nodes.length + 1),
