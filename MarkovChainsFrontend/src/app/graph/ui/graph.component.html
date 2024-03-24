@@ -1,0 +1,80 @@
+<div class="graph-container">
+    <ngx-graph
+            [links]="links"
+            [nodes]="nodes"
+            [layout]="layout"
+            [curve]="curve"
+            [draggingEnabled]="draggingEnabled"
+            [panningEnabled]="panningEnabled"
+            [enableZoom]="zoomEnabled"
+            [zoomSpeed]="zoomSpeed"
+            [minZoomLevel]="minZoomLevel"
+            [maxZoomLevel]="maxZoomLevel"
+            [panOnZoom]="panOnZoom"
+            [autoZoom]="autoZoom"
+            [autoCenter]="autoCenter"
+            [update$]="update$"
+            [center$]="center$"
+            [zoomToFit$]="zoomToFit$"
+    >
+        <ng-template #defsTemplate>
+            <svg:marker
+                    id="arrow"
+                    viewBox="0 -5 10 10"
+                    refX="8"
+                    refY="0"
+                    markerWidth="4"
+                    markerHeight="4"
+                    orient="auto"
+            >
+                <svg:path d="M0,-5L10,0L0,5" class="arrow-head" />
+            </svg:marker>
+        </ng-template>
+
+        <ng-template #nodeTemplate let-node>
+            <svg:g
+                    class="node"
+                    (click)="handleNodeClick(node)"
+                    (dblclick)="handleNodeDoubleClick(node)"
+                    (mouseenter)="handleNodeMouseEnter(node)"
+                    (mouseleave)="handleNodeMouseLeave(node)"
+            >
+                <svg:circle
+                        [attr.cx]="node.dimension.width/2"
+                        [attr.cy]="node.dimension.height/2"
+                        [attr.r]="Math.max(node.dimension.width, node.dimension.height) / 2"
+                        [attr.fill]="node.data.color"
+                        [attr.stroke]="node.data.hover ? 'green' : 'none'"
+                        stroke-width="3"
+                />
+                <svg:text
+                        alignment-baseline="central"
+                        [attr.x]="10"
+                        [attr.y]="node.dimension.height / 2"
+                >
+                    {{ node.label }}<tspan baseline-shift="sub" [innerHTML]="node.id"></tspan>
+                </svg:text>
+            </svg:g>
+        </ng-template>
+
+        <ng-template #linkTemplate let-link>
+            <svg:g class="edge" (dblclick)="handleEdgeDoubleClick(link)">
+                <svg:path
+                        class="line"
+                        [attr.stroke-width]="getLineWidth(link.label)"
+                        marker-end="url(#arrow)"
+                ></svg:path>
+                <svg:text class="edge-label" text-anchor="middle">
+                    <textPath
+                            class="text-path"
+                            [attr.href]="'#' + link.id"
+                            [style.dominant-baseline]="link.dominantBaseline"
+                            startOffset="50%"
+                    >
+                        {{ link.label }}
+                    </textPath>
+                </svg:text>
+            </svg:g>
+        </ng-template>
+    </ngx-graph>
+</div>
