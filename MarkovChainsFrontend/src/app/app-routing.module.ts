@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {MatrixEditComponent} from "./matrix/view/matrix-edit/matrix-edit.component";
-import {GraphComponent} from "./graph/graph.component";
+import {GraphPageComponent} from "./graph/graph-page.component";
 
 const routes: Routes = [
   {
@@ -9,7 +9,7 @@ const routes: Routes = [
     path: "matrix"
   },
   {
-    component: GraphComponent,
+    component: GraphPageComponent,
     path: "graph"
   }
 ];
