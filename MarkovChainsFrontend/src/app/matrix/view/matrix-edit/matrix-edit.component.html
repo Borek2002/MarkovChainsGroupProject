@@ -1,17 +1,14 @@
 <h1>{{'macierzIWektor' | translate}}</h1>
 
-<div>
-  <label>{{'iloscKolumn' | translate}}</label>
-  <input type="number" [(ngModel)]="rows" (change)="initializeMatrix()">
-  <br>
-  <label>{{'iloscWierszy' | translate}}</label>
-  <input type="number" [(ngModel)]="cols" (change)="initializeMatrix()">
+<div class="inputOutputValues">
+  <label>{{'iloscKolumnIWierszy' | translate}}</label>
+  <input type="number" [(ngModel)]="rowsAndColumns" (change)="initializeMatrix()">
 </div>
 <br>
 <div>
   <label>{{'macierz' | translate}}</label>
   <table id="matrix">
-    <tr *ngFor="let item of matrix; let i = index">
+    <tr *ngFor="let item of data.transitionMatrix; let i = index">
       <td *ngFor="let field of item| keyvalue;let j = index ">
         <input type="number" inputmode="none" [(ngModel)]="field.value" (blur)="onCellMatrixBlur(field.value, i, j)"
                [attr.id]="'matrixInput_' + i + '_' + j"
@@ -27,14 +24,50 @@
   <label> {{'wektor' | translate}}</label>
   <table id="vector">
     <tr>
-      <td *ngFor="let item of initialVector| keyvalue;let k = index ">
-        <input type="number" inputmode="none" [(ngModel)]="item.value" (blur)="onCellVectorBlur(item.value, k)">
+      <td *ngFor="let item of data.initialVector| keyvalue;let k = index ">
+        <input type="number" inputmode="none" [(ngModel)]="item.value" (blur)="onCellVectorBlur(item.value, k)"
+               [attr.id]="'vectorInput_'+k"
+               (keydown.arrowleft)="moveVectorFocus(k - 1, $event)"
+               (keydown.arrowright)="moveVectorFocus(k + 1, $event)">
       </td>
     </tr>
   </table>
-  <button (click)="saveChanges()">Zapisz</button>
-</div>
+  <button (click)="onSave()">Zapisz</button>
+</div >
 
+<br/>
+
+<div id="calculationButtons">
+  <div class="columnButtonAndOutput">
+    <button (click)="onFinalProbability()">{{'obliczPrawdopodobienstwoFinalne' | translate}}</button>
+    <div *ngIf="finalProbability.length > 0">
+      <p>[{{ finalProbability.join(', ') }}]</p>
+    </div>
+  </div>
+
+  <div>
+    <div class="columnButtonAndOutput">
+      <button>{{'obliczPrawdopodobieństwoPoNKrokach' | translate}}</button>
+      <div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="columnButtonAndOutput">
+    <button>{{'obliczPrawdopodobieństwoStacjonarne' | translate}}</button>
+    <div>
+
+    </div>
+  </div>
+
+  <div class="columnButtonAndOutput">
+    <button>{{'stanPochlaniajacy' | translate}}</button>
+    <div>
+
+    </div>
+  </div>
+</div>
 <div>
   <p id="validationMessage"></p>
 </div>

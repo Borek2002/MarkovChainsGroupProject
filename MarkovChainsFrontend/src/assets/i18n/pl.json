@@ -4,8 +4,11 @@
   "macierze": "Macierze",
   "header": "Wizaualizacja Łańcuchów Markova",
   "macierzIWektor": "Macierz i Wektor",
-  "iloscKolumn": "Ilość kolumn",
-  "iloscWierszy": "Ilość wierszy",
+  "iloscKolumnIWierszy": "Ilość kolumn i wierszy",
   "macierz": "Macierz",
-  "wektor": "Wektor"
+  "wektor": "Wektor",
+  "obliczPrawdopodobienstwoFinalne": "Oblicz prawdopodobienstwo finalne",
+  "obliczPrawdopodobieństwoPoNKrokach": "Oblicz prawdopodobieństwo po n krokach",
+  "obliczPrawdopodobieństwoStacjonarne": "Oblicz prawdopdobieństo stacjonarne",
+  "stanPochlaniajacy": "Stan pochłaniający"
 }

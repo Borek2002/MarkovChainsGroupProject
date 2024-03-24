@@ -19,6 +19,7 @@ import {GraphPageComponent} from './graph/graph-page.component';
 import {NgxGraphModule} from "@swimlane/ngx-graph";
 import {MaterialModule} from "./graph/utils/material.module";
 import {GraphComponent} from "./graph/ui/graph.component";
+import {MatrixAndVectorService} from "./matrix/service/matrix-and-vector-service";
 
 export function HttpLoaderFactory(http:HttpClient){
   return new  TranslateHttpLoader(http);
@@ -56,7 +57,7 @@ export function HttpLoaderFactory(http:HttpClient){
     NgxGraphModule,
     MaterialModule
   ],
-  providers: [],
+  providers: [MatrixAndVectorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
