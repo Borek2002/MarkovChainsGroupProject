@@ -15,9 +15,10 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ValidationRowModalComponent } from './matrix/view/validation-row-modal/validation-row-modal.component';
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
-import { GraphComponent } from './graph/graph.component';
+import {GraphPageComponent} from './graph/graph-page.component';
 import {NgxGraphModule} from "@swimlane/ngx-graph";
-import {MaterialModule} from "./graph/material.module";
+import {MaterialModule} from "./graph/utils/material.module";
+import {GraphComponent} from "./graph/ui/graph.component";
 
 export function HttpLoaderFactory(http:HttpClient){
   return new  TranslateHttpLoader(http);
@@ -32,7 +33,8 @@ export function HttpLoaderFactory(http:HttpClient){
     FooterComponent,
     MatrixEditComponent,
     ValidationRowModalComponent,
-    GraphComponent
+    GraphComponent,
+    GraphPageComponent,
   ],
   imports: [
     BrowserModule,

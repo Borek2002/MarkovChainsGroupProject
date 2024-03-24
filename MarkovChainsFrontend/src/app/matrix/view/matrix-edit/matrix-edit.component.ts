@@ -1,9 +1,9 @@
 import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {MatDialog} from "@angular/material/dialog";
-import { GraphComponent } from '../../../graph/graph.component'
 import {ValidationRowModalComponent} from "../validation-row-modal/validation-row-modal.component";
-import {link} from "d3";
+import {Node, Edge} from "@swimlane/ngx-graph";
+
 
 @Component({
   selector: 'app-matrix-edit',
@@ -16,8 +16,8 @@ export class MatrixEditComponent implements OnInit{
   matrix: number[][] = [];
   initialVector: number[]=[];
 
-  @Output() nodesUpdated = new EventEmitter<any[]>();
-  @Output() linksUpdated = new EventEmitter<any[]>();
+  @Output() nodesUpdated = new EventEmitter<Node[]>();
+  @Output() linksUpdated = new EventEmitter<Edge[]>();
   constructor(private http: HttpClient, public dialog: MatDialog ) {
     this.initializeMatrix();
   }
@@ -26,17 +26,6 @@ export class MatrixEditComponent implements OnInit{
     this.saveChanges();
   }
 
-  // initializeMatrix() {
-  //   this.matrix = [];
-  //   for (let i = 0; i < this.rows; i++) {
-  //     let row = [];
-  //     for (let j = 0; j < this.cols; j++) {
-  //       row.push(0.0);
-  //     }
-  //     this.initialVector.push(0.0);
-  //     this.matrix.push(row);
-  //   }
-  // }
   initializeMatrix() {
     this.matrix = [];
     for (let i = 0; i < this.rows; i++) {
@@ -80,14 +69,14 @@ export class MatrixEditComponent implements OnInit{
     console.log("Zapisano zmiany: ", this.matrix);
 
     // Convert matrix data to graph data
-    const nodes = [];
-    const links = [];
+    const nodes: Node[] = [];
+    const links: Edge[] = [];
 
     for (let i = 0; i < this.rows; i++) {
       nodes.push({
         id: '' + (i + 1),
         label: 'S'
-      });
+      }as Node);
     }
 
     for (let i = 0; i < this.rows; i++) {
