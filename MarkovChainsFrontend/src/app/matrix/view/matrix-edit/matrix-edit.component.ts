@@ -110,6 +110,7 @@ export class MatrixEditComponent implements OnInit{
     //this.graphComponent.update$.next(true);
     //this.sendMatrixAndInitialVectorToBackend();
     */
+  }
   onSave() {
     if (this.validateMatrixRowSumToOne()) {
       console.log("Zapisano zmiany: ", this.data.transitionMatrix);
