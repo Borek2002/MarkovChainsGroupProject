@@ -18,6 +18,9 @@ public interface MarkovChainController {
     @GetMapping("/markovchain/immersiveState")
     public int getImmersiveState();
 
+    @GetMapping("/markovchain/matrixAndVector")
+    public MarkovRequest getMatrixAndVector();
+
     @CrossOrigin(origins = "http://localhost:4200")
     @PutMapping("/markovchain/matrixAndVector")
     public ResponseEntity<Void> setMatrixAndVector(@RequestBody MarkovRequest request);

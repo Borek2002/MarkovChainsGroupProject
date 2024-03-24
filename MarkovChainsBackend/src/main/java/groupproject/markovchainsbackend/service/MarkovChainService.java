@@ -1,8 +1,11 @@
 package groupproject.markovchainsbackend.service;
 
+import groupproject.markovchainsbackend.dto.MarkovRequest;
 import groupproject.markovchainsbackend.markovchain.MarkovChain;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.math3.linear.Array2DRowRealMatrix;
+import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +39,15 @@ public class MarkovChainService {
         return result.toArray();
     }
 
-    public int getImmersiveState(){
+    public int getImmersiveState() {
         return this.markovChain.getImmersiveState();
+    }
+
+    public MarkovRequest getMatrixAndVector(){
+        return this.markovChain.getMatrixAndVector();
+    }
+
+    public void setMatrixAndVector(MarkovRequest request) {
+        this.markovChain.setMatrixAndVector(request);
     }
 }

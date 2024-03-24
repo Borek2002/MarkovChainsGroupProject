@@ -11,14 +11,21 @@ export class MatrixAndVectorService {
   getFinalProbability(): Observable<number[]>{
     return this.http.get<number[]>('/markovchain/finalProbability');
   }
+
   getProbabilityAfterNSteps(): Observable<number[]>{
     return this.http.get<number[]>('/markovchain/finalProbability');
   }
+
   getStationaryProbability(): Observable<number[]>{
     return this.http.get<number[]>('/markovchain/stationaryDistribution');
   }
+
   getImmersiveState(): Observable<number>{
     return this.http.get<number>('/markovchain/immersiveState');
+  }
+
+  getMatrixAndVector(): Observable<MatrixAndVector>{
+    return this.http.get<MatrixAndVector>('/markovchain/matrixAndVector');
   }
 
   putVectorAndMatrix(request: MatrixAndVector): Observable<any>{
