@@ -5,7 +5,7 @@ import {ValidationRowModalComponent} from "../validation-row-modal/validation-ro
 import {Node, Edge} from "@swimlane/ngx-graph";
 import {MatrixAndVector} from "../../model/matrixAndVector";
 import {MatrixAndVectorService} from "../../service/matrix-and-vector-service";
-import {Observable, tap} from "rxjs";
+
 
 @Component({
   selector: 'app-matrix-edit',
@@ -16,25 +16,29 @@ import {Observable, tap} from "rxjs";
 export class MatrixEditComponent implements OnInit{
   rows: number = 3;
   cols: number = 3;
+
   rowsAndColumns: number = 3;
-  data: MatrixAndVector = { transitionMatrix:[], initialVector:[]};
+  data: MatrixAndVector = {transitionMatrix: [], initialVector: []};
   finalProbability: number[] = [];
+  probabilityAfterNSteps: number[] = [];
+  stationaryProbability: number[] = [];
   matrix: number[][] = [];
   initialVector: number[]=[];
 
   @Output() nodesUpdated = new EventEmitter<Node[]>();
   @Output() linksUpdated = new EventEmitter<Edge[]>();
-  constructor(private http: HttpClient, public dialog: MatDialog, private matrixAndVectorService: MatrixAndVectorService, ) {
+  constructor(private matrixAndVectorService: MatrixAndVectorService,
+              public dialog: MatDialog) {
     this.initializeMatrix();
   }
 
-  ngOnInit(){
-    this.saveChanges();
+  ngOnInit(): void {
+      this.saveChanges();
   }
 
   initializeMatrix() {
     this.data.transitionMatrix = [];
-    this.data.initialVector=[]
+    this.data.initialVector = []
     for (let i = 0; i < this.rowsAndColumns; i++) {
       let row = [];
       /*let rowSum = 0; // sum of elements in the row
@@ -67,8 +71,8 @@ export class MatrixEditComponent implements OnInit{
     }
   }
   onCellMatrixBlur(value: any, rowIndex: number, colIndex: number) {
-      this.data.transitionMatrix[rowIndex][colIndex] = value;
-      console.log(value)
+    this.data.transitionMatrix[rowIndex][colIndex] = value;
+    console.log(value)
   }
 
   onCellVectorBlur(value: any, colIndex: number) {
@@ -125,22 +129,22 @@ export class MatrixEditComponent implements OnInit{
     }
   }
 
-  onFinalProbability(){
+  onFinalProbability() {
     this.matrixAndVectorService.getFinalProbability()
-      .pipe(
-        tap(data => {
-          this.finalProbability = data; // Ustawia otrzymane dane jako ostateczne prawdopodobieństwo
-        })
-      )
-      .subscribe({
-        error: error => {
-          console.error('An error occurred:', error);
-          // Obsługa błędów
-        }
-      });
+      .subscribe(result => this.finalProbability = result);
   }
 
-  validateMatrixRowSumToOne():boolean{
+  onProbabilityAfterNSteps() {
+    this.matrixAndVectorService.getProbabilityAfterNSteps()
+      .subscribe(result => this.probabilityAfterNSteps = result);
+  }
+
+  onStationaryProbability() {
+    this.matrixAndVectorService.getStationaryProbability()
+      .subscribe(result => this.stationaryProbability = result);
+  }
+
+  validateMatrixRowSumToOne(): boolean {
     let isValid = true;
     for (let i = 0; i < this.rowsAndColumns; i++) {
       const rowSum = this.data.transitionMatrix[i].reduce((sum, value) => sum + value, 0);
@@ -151,7 +155,7 @@ export class MatrixEditComponent implements OnInit{
     }
     if (!isValid) {
       this.dialog.open(ValidationRowModalComponent, {
-        data: { title: 'Błąd walidacji', message: 'Proszę poprawić macierz, aby suma każdego wiersza wynosiła 1.' }
+        data: {title: 'Błąd walidacji', message: 'Proszę poprawić macierz, aby suma każdego wiersza wynosiła 1.'}
       });
     }
     return isValid;
@@ -181,4 +185,5 @@ export class MatrixEditComponent implements OnInit{
       }
     }
   }
+
 }

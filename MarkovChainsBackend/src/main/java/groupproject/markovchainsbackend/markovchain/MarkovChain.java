@@ -1,5 +1,6 @@
 package groupproject.markovchainsbackend.markovchain;
 
+import groupproject.markovchainsbackend.dto.MarkovRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -129,6 +130,18 @@ public class MarkovChain {
             diagonalElements[i] = Math.pow(diagonalMatrix.getEntry(i, i), Integer.MAX_VALUE);
         }
         return diagonalElements;
+    }
+
+    public MarkovRequest getMatrixAndVector(){
+        return MarkovRequest.builder()
+                .initialVector(this.initialVector.toArray())
+                .transitionMatrix(this.transitionMatrix.getData())
+                .build();
+    }
+
+    public void setMatrixAndVector(MarkovRequest request) {
+        this.initialVector = new ArrayRealVector(request.getInitialVector());
+        this.transitionMatrix = new Array2DRowRealMatrix(request.getTransitionMatrix());
     }
 
     public static void printMatrix(RealMatrix matrix) {
