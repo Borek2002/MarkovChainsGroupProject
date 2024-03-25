@@ -39,7 +39,7 @@ button {
   font-size: 95%;
   background-color: #1b4332;
   border-radius: 8px;
-  margin: 0 20px;
+  margin: 5px 0 5px 0;
 }
 button:hover{
   background-color: #52b788;
