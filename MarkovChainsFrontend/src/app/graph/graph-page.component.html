@@ -45,6 +45,9 @@
           <button mat-raised-button color="primary" class="button" (click)="onCreateEdgeClick()">
             Create Edge
           </button>
+          <button mat-raised-button color="primary" class="button" (click)="getMatrixAndVector()">
+            Get Matrix
+          </button>
         </div>
       </div>
 
@@ -67,13 +70,16 @@
       </div>
     </div>
     <app-matrix-edit
-      (nodesUpdated)="updateNodes($event)"
-      (linksUpdated)="updateLinks($event)">
+      (graphUpdated)="updateGraphData()"
+    >
     </app-matrix-edit>
   </mat-drawer>
   <mat-drawer-content>
     <div class="page">
-      <app-graph></app-graph>
+      <app-graph
+        [graph]="this.graph"
+      >
+      </app-graph>
     </div>
     <div
       *ngIf="selectedNode"

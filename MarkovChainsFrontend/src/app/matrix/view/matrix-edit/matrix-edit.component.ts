@@ -1,11 +1,9 @@
 import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
 import {MatDialog} from "@angular/material/dialog";
 import {ValidationRowModalComponent} from "../validation-row-modal/validation-row-modal.component";
-import {Node, Edge} from "@swimlane/ngx-graph";
+import {Node, Edge, Graph} from "@swimlane/ngx-graph";
 import {MatrixAndVector} from "../../model/matrixAndVector";
 import {MatrixAndVectorService} from "../../service/matrix-and-vector-service";
-
 
 @Component({
   selector: 'app-matrix-edit',
@@ -14,9 +12,6 @@ import {MatrixAndVectorService} from "../../service/matrix-and-vector-service";
 })
 
 export class MatrixEditComponent implements OnInit{
-  rows: number = 3;
-  cols: number = 3;
-
   rowsAndColumns: number = 3;
   data: MatrixAndVector = {transitionMatrix: [], initialVector: []};
   finalProbability: number[] = [];
@@ -25,15 +20,14 @@ export class MatrixEditComponent implements OnInit{
   matrix: number[][] = [];
   initialVector: number[]=[];
 
-  @Output() nodesUpdated = new EventEmitter<Node[]>();
-  @Output() linksUpdated = new EventEmitter<Edge[]>();
+  @Output() graphUpdated = new EventEmitter<void>();
+
   constructor(private matrixAndVectorService: MatrixAndVectorService,
               public dialog: MatDialog) {
     this.initializeMatrix();
   }
 
   ngOnInit(): void {
-      this.saveChanges();
   }
 
   initializeMatrix() {
@@ -80,47 +74,13 @@ export class MatrixEditComponent implements OnInit{
     console.log(value)
   }
 
-  saveChanges() {
-    /*this.validateMatrixRowSumToOne();
-    console.log("Zapisano zmiany: ", this.matrix);
-
-    // Convert matrix data to graph data
-    const nodes: Node[] = [];
-    const links: Edge[] = [];
-
-    for (let i = 0; i < this.rows; i++) {
-      nodes.push({
-        id: '' + (i + 1),
-        label: 'S'
-      }as Node);
-    }
-
-    for (let i = 0; i < this.rows; i++) {
-      for (let j = 0; j < this.cols; j++) {
-        if (this.matrix[i][j] > 0) {
-          links.push({
-            id: 'edge' + (links.length + 1),
-            source: '' + (i + 1),
-            target: '' + (j + 1),
-            label: '' + this.matrix[i][j],
-          });
-        }
-      }
-    }
-
-    // Send graph data to the Graph component to be visualized
-    this.nodesUpdated.emit(nodes);
-    this.linksUpdated.emit(links);
-    //this.graphComponent.update$.next(true);
-    //this.sendMatrixAndInitialVectorToBackend();
-    */
-  }
   onSave() {
     if (this.validateMatrixRowSumToOne()) {
       console.log("Zapisano zmiany: ", this.data.transitionMatrix);
       this.matrixAndVectorService.putVectorAndMatrix(this.data!).subscribe(
         response => {
           console.log('Response:', response);
+          this.graphUpdated.emit();
         },
         error => {
           console.error('Error:', error);
@@ -165,7 +125,6 @@ export class MatrixEditComponent implements OnInit{
   moveMatrixFocus(rowIndex: number, colIndex: number, event: KeyboardEvent): void {
     event.preventDefault();
     if (rowIndex >= 0 && rowIndex < this.data.transitionMatrix.length && colIndex >= 0 && colIndex < this.data.transitionMatrix[0].length) {
-      console.log("dzialam")
       const inputId = 'matrixInput_' + rowIndex + '_' + colIndex;
       const inputElement = document.getElementById(inputId) as HTMLInputElement;
       if (inputElement) {
@@ -177,7 +136,6 @@ export class MatrixEditComponent implements OnInit{
   moveVectorFocus(colIndex: number, event: KeyboardEvent): void {
     event.preventDefault();
     if (colIndex >= 0 && colIndex < this.data.initialVector.length) {
-      console.log("dzialam")
       const inputId = 'vectorInput_' + colIndex;
       const inputElement = document.getElementById(inputId) as HTMLInputElement;
       if (inputElement) {

@@ -6,13 +6,14 @@ import {
     ViewChild
 } from '@angular/core';
 import {
-  Edge,
-  Node,
+    Edge, Graph,
+    Node,
 } from '@swimlane/ngx-graph';
 import {Subject} from "rxjs";
 import {NavService} from "../component/nav/nav.service";
 import {GraphDataService} from "src/app/graph/data-access/GraphDataService"
 import {GraphComponent} from "./ui/graph.component";
+import {MatrixAndVectorService} from "../matrix/service/matrix-and-vector-service";
 
 @Component({
   selector: 'app-graph-page',
@@ -32,15 +33,18 @@ export class GraphPageComponent implements OnInit{
   autoZoom: boolean = false;
   autoCenter: boolean = false;
 
-  selectedSourceNode: Node | null = null;
-  selectedTargetNode: Node | null = null;
   selectedNode: Node | null = null;
   selectedEdge: Edge | null = null;
+
+  graph: Graph = {
+    nodes: [],
+    edges: []
+  }
 
   // Deklaracja obiektu Subject do wywoływania aktualizacji widoku
   private updateGraph$: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private cdr: ChangeDetectorRef, private navService: NavService, private graphDataService: GraphDataService) {}
+  constructor(private cdr: ChangeDetectorRef, private navService: NavService, private graphDataService: GraphDataService, private matrixAndVectorService: MatrixAndVectorService) {}
 
   toggleSidebar() {
       this.sidebarOpened = !this.sidebarOpened;
@@ -53,13 +57,15 @@ export class GraphPageComponent implements OnInit{
     });
   }
 
+  getMatrixAndVector(){
+    this.graphComponent.getMatrixAndVector();
+  }
 
   setInterpolationType(curveType:any){
     this.graphComponent.setInterpolationType(curveType);
   }
 
   onCreateNodeClick() {
-    // Dodaj nowy węzeł do struktury danych
     const newNode: Node = {
       id: '' + (this.graphDataService.getNodes().length + 1),
       label: 'S',
@@ -84,36 +90,10 @@ export class GraphPageComponent implements OnInit{
     this.graphComponent.toggleCreateEdgeMode();
   }
 
-  updateNodes(nodes: Node[]){
-    this.graphDataService.updateNodes(nodes);
-  }
-
-  updateLinks(links: Edge[]){
-    this.graphDataService.updateLinks(links);
-  }
-
-  onNodeClick(node: Node) {
-    this.graphComponent.handleNodeClick(node);
-  }
-
-  onNodeDoubleClick(node: Node) {
-    this.graphComponent.handleNodeDoubleClick(node);
-  }
-
-  onNodeMouseEnter(node: Node) {
-    this.graphComponent.handleNodeMouseEnter(node);
-  }
-
-  onNodeMouseLeave(node: Node) {
-    this.graphComponent.handleNodeMouseLeave(node);
-  }
-
-  onEdgeDoubleClick(edge: Edge) {
-    this.graphComponent.handleEdgeDoubleClick(edge);
-  }
-
-  getLineWidth(label: string){
-    this.graphComponent.getLineWidth(label);
+  updateGraphData() {
+    this.matrixAndVectorService.getMatrixAndVector().subscribe(data => {
+      this.graph = data;
+    })
   }
 
 }
