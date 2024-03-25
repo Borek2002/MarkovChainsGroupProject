@@ -1,17 +1,18 @@
 package groupproject.markovchainsbackend;
 
+
 import groupproject.markovchainsbackend.markovchain.MarkovChain;
-import groupproject.markovchainsbackend.markovchain.ProbabilityChart;
-import org.apache.commons.math3.linear.Array2DRowRealMatrix;
-import org.apache.commons.math3.linear.ArrayRealVector;
-import org.apache.commons.math3.linear.RealMatrix;
-import org.apache.commons.math3.linear.RealVector;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.Collections;
+
 
 @SpringBootApplication
 public class MarkovChainsBackendApplication {
@@ -109,6 +110,20 @@ public class MarkovChainsBackendApplication {
 //            } catch (NumberFormatException e) {
 //                return 0; // Domyślna wartość w przypadku błędu
 //            }
+    }
+    @Bean
+    public CorsWebFilter corsWebFilter() {
+
+        CorsConfiguration corsConfig = new CorsConfiguration();
+        corsConfig.addAllowedOrigin("*");
+        corsConfig.addAllowedMethod("*");
+        corsConfig.addAllowedHeader("*");
+        corsConfig.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfig);
+
+        return new CorsWebFilter(source);
     }
 
 }
