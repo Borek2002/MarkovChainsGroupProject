@@ -1,13 +1,12 @@
 <mat-drawer-container class="example-container">
   <mat-drawer #drawer mode="side" class="sidebar" [opened]="sidebarOpened">
-    <h2>Configuration</h2>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>Settings</mat-panel-title>
         <mat-icon>settings</mat-icon>
       </mat-expansion-panel-header>
       <form class="settings">
-        <mat-form-field>
+        <mat-form-field color="primary">
           <mat-select
             placeholder="Line Curve Interpolation"
             [ngModel]="curveType"
@@ -37,43 +36,53 @@
       </form>
     </mat-expansion-panel>
     <div class="button-container">
-      <div class="row">
-        <div class="col-md-6 offset-md-3">
-          <button mat-raised-button color="primary" class="button" (click)="onCreateNodeClick()">
+      <!--<div class="row">
+        <div class="col">
+          <button mat-raised-button color="primary" class="button btn btn-primary btn-block" (click)="onCreateNodeClick()">
             Create Node
           </button>
-          <button mat-raised-button color="primary" class="button" (click)="onCreateEdgeClick()">
+        </div>
+        <div class="col">
+          <button mat-raised-button color="primary" class="button btn btn-primary btn-block" (click)="onCreateEdgeClick()">
             Create Edge
           </button>
         </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-4">
-        <button mat-stroked-button color="primary" class="button" (click)="updateGraph()">
-          Update
-        </button>
-        </div>
-        <div class="col-md-4">
-          <button mat-stroked-button color="primary" class="button" (click)="centerGraph()">
-            Center
+        <div class="col">
+          <button mat-raised-button color="primary" class="button btn btn-primary btn-block" (click)="getMatrixAndVector()">
+            Get Matrix
           </button>
         </div>
-        <div class="col-md-4">
-          <button mat-stroked-button color="primary" class="button" (click)="zoomToFit()">
+      </div>-->
+
+      <div class="row row-cols-auto">
+        <div class="col">
+          <button mat-raised-button color="primary" class="button" (click)="updateGraph()">
+            Update
+          </button>
+        </div>
+        <div class="col">
+          <button mat-raised-button color="primary" class="button" (click)="zoomToFit()">
             Zoom to fit
+          </button>
+        </div>
+        <div class="col">
+          <button mat-raised-button color="primary" class="button" (click)="centerGraph()">
+            Center
           </button>
         </div>
       </div>
     </div>
     <app-matrix-edit
-      (nodesUpdated)="updateNodes($event)"
-      (linksUpdated)="updateLinks($event)">
+      (graphUpdated)="updateGraphData()"
+    >
     </app-matrix-edit>
   </mat-drawer>
   <mat-drawer-content>
     <div class="page">
-      <app-graph></app-graph>
+      <app-graph
+        [graph]="this.graph"
+      >
+      </app-graph>
     </div>
     <div
       *ngIf="selectedNode"

@@ -1,5 +1,5 @@
 {
-  "teoria": "Teory",
+  "teoria": "Theory",
   "grafy": "Graph",
   "macierze": "Matrices",
   "header": "Visualization of Markov Chains",
@@ -10,5 +10,6 @@
   "obliczPrawdopodobienstwoFinalne": "Calculate final probability",
   "obliczPrawdopodobieństwoPoNKrokach": "Calculate probability after n steps",
   "obliczPrawdopodobieństwoStacjonarne": "Calculate stationary probability",
-  "stanPochlaniajacy": "Immersive state"
+  "stanPochlaniajacy": "Immersive state",
+  "Zapisz": "Save"
 }

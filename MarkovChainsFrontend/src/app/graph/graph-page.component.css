@@ -32,10 +32,6 @@ mat-checkbox {
   margin: 3px;
 }
 
-.node-buttons{
-  display:block;
-}
-
 .sidebar-toggle-button {
   position: absolute;
   right: 0;
@@ -44,7 +40,7 @@ mat-checkbox {
   z-index: 999;
 }
 
-.button-container .row {
-  display: flex;
-  align-items: stretch;
+.button-container{
+  margin-top: 5px;
 }
+

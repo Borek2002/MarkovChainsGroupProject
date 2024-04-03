@@ -1,8 +1,9 @@
-import {AfterViewInit, Component, Injectable, Input, OnInit} from "@angular/core";
-import {ClusterNode, DagreNodesOnlyLayout, Edge, Layout, Node} from "@swimlane/ngx-graph";
-import {Subject} from "rxjs";
+import {AfterViewInit, Component, Injectable, Input, OnDestroy, OnInit} from "@angular/core";
+import {ClusterNode, DagreNodesOnlyLayout, Edge, Graph, Layout, Node} from "@swimlane/ngx-graph";
+import {Subject, Subscription} from "rxjs";
 import {GraphDataService} from "../data-access/GraphDataService";
 import * as shape from "d3-shape";
+import {MatrixAndVectorService} from "../../matrix/service/matrix-and-vector-service";
 
 @Injectable({ providedIn: 'root' })
 @Component({
@@ -13,12 +14,16 @@ import * as shape from "d3-shape";
     }`],
     templateUrl: `./graph.component.html`,
 })
-export class GraphComponent implements OnInit{
+export class GraphComponent implements OnInit, OnDestroy, AfterViewInit {
 
     protected readonly Math = Math;
 
-    nodes: Node[] = [];
-    links: Edge[] = [];
+    @Input({required: true}) graph: Graph = {
+        nodes: [],
+        edges: []
+    };
+
+    private graphUpdateSubscription?: Subscription;
 
     layout: string | Layout = new DagreNodesOnlyLayout();
     curveType: string = 'curveBundle';
@@ -64,13 +69,20 @@ export class GraphComponent implements OnInit{
         }
     }
 
-    constructor(private graphDataService: GraphDataService) {}
+    constructor(private graphDataService: GraphDataService, private matrixAndVectorService: MatrixAndVectorService) {}
 
     ngOnInit() {
-        this.setInterpolationType(this.curveType);
-        this.nodes = this.graphDataService.getNodes();
-        this.links = this.graphDataService.getLinks();
+      this.setInterpolationType(this.curveType);
+      this.getMatrixAndVector();
     }
+
+    ngAfterViewInit() {
+        this.center$.next(true);
+    }
+
+  ngOnDestroy(): void {
+    this.graphUpdateSubscription?.unsubscribe();
+  }
 
     handleNodeClick(node: Node) {
         if (this.createEdgeMode) {
@@ -84,7 +96,7 @@ export class GraphComponent implements OnInit{
 
                 // Dodaj nową krawędź
                 const newEdge: Edge = {
-                    id: 'edge' + (this.nodes.length + 1),
+                    id: 'edge' + (this.graph.nodes.length + 1),
                     source: this.selectedSourceNode.id,
                     target: this.selectedTargetNode.id,
                 };
@@ -136,18 +148,11 @@ export class GraphComponent implements OnInit{
         this.zoomToFit$.next(true);
     }
 
-    updateNodeLabel(newLabel: string) {
-        if (this.selectedNode) {
-            this.selectedNode.label = newLabel;
-            this.selectedNode = null;
-        }
+    getMatrixAndVector(){
+      this.matrixAndVectorService.getMatrixAndVector().subscribe(data => {
+        this.graph.nodes = data.nodes;
+        this.graph.edges = data.edges;
+        this.update$.next(true);
+      })
     }
-
-    updateEdgeLabel(newLabel: string) {
-        if (this.selectedEdge) {
-            this.selectedEdge.label = newLabel;
-            this.selectedEdge = null;
-        }
-    }
-
 }

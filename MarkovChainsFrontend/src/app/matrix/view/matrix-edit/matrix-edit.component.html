@@ -32,14 +32,14 @@
       </td>
     </tr>
   </table>
-  <button (click)="onSave()">Zapisz</button>
+  <button mat-raised-button color ="primary" (click)="onSave()">{{'Zapisz' | translate}}</button>
 </div >
 
 <br/>
 
 <div id="calculationButtons">
   <div class="columnButtonAndOutput">
-    <button (click)="onFinalProbability()">{{'obliczPrawdopodobienstwoFinalne' | translate}}</button>
+    <button mat-raised-button color="primary" (click)="onFinalProbability()">{{'obliczPrawdopodobienstwoFinalne' | translate}}</button>
     <div *ngIf="finalProbability.length > 0">
       <p>[{{ finalProbability.join(', ') }}]</p>
     </div>
@@ -47,7 +47,7 @@
 
   <div>
     <div class="columnButtonAndOutput">
-      <button (click)="onProbabilityAfterNSteps()">{{'obliczPrawdopodobieństwoPoNKrokach' | translate}}</button>
+      <button mat-raised-button color="primary" (click)="onProbabilityAfterNSteps()">{{'obliczPrawdopodobieństwoPoNKrokach' | translate}}</button>
       <div *ngIf="probabilityAfterNSteps.length > 0">
         <p>[{{ probabilityAfterNSteps.join(', ') }}]</p>
       </div>
@@ -55,14 +55,14 @@
   </div>
 
   <div class="columnButtonAndOutput">
-    <button (click)="onStationaryProbability()">{{'obliczPrawdopodobieństwoStacjonarne' | translate}}</button>
+    <button mat-raised-button color="primary" (click)="onStationaryProbability()">{{'obliczPrawdopodobieństwoStacjonarne' | translate}}</button>
     <div *ngIf="stationaryProbability.length > 0">
       <p>[{{ stationaryProbability.join(', ') }}]</p>
     </div>
   </div>
 
   <div class="columnButtonAndOutput">
-    <button>{{'stanPochlaniajacy' | translate}}</button>
+    <button mat-raised-button color="primary" >{{'stanPochlaniajacy' | translate}}</button>
     <div>
 
     </div>
