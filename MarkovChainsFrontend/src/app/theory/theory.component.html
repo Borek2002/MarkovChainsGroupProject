@@ -1,0 +1,73 @@
+<div class="container">
+  <h2>Łańcuchy Markowa</h2>
+
+  <div class="section">
+    <h3>Wprowadzenie do Łańcuchów Markowa</h3>
+    <p>Łańcuchy Markowa są to procesy stochastyczne, w których przyszły stan systemu zależy wyłącznie od aktualnego stanu, a nie od całej historii procesu. Początkowo używane do modelowania losowych procesów, stały się popularnym narzędziem w różnych dziedzinach, takich jak informatyka, ekonomia, biologia itp.</p>
+  </div>
+
+  <div class="section">
+    <h3>Podstawowe pojęcia</h3>
+    <ul>
+      <li><strong>Stan:</strong> Każdy możliwy wynik procesu.</li>
+      <li><strong>Macierz przejść:</strong> Macierz określająca prawdopodobieństwa przejść między stanami.</li>
+      <li><strong>Prawdopodobieństwo przejścia:</strong> Prawdopodobieństwo przejścia z jednego stanu do drugiego.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>Własności Łańcuchów Markowa</h3>
+    <ul>
+      <li><strong>Ergodyczność:</strong> Łańcuch Markowa jest ergodyczny, jeśli można z każdego stanu osiągnąć każdy inny stan w skończonym czasie.</li>
+      <li><strong>Stacjonarność:</strong> Łańcuch Markowa osiąga stan stacjonarny, gdy rozkład prawdopodobieństwa nie zmienia się w czasie.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>Algorytm iteracji wartości</h3>
+    <p>Algorytm iteracji wartości jest używany do znajdowania stanu stacjonarnego w Łańcuchach Markowa. Polega na iteracyjnym obliczaniu wartości stanu, aż osiągnie ona pewną tolerancję.</p>
+  </div>
+
+  <div class="section">
+    <h3>Przykłady zastosowań</h3>
+    <ul>
+      <li>Modelowanie ruchu w sieciach telekomunikacyjnych.</li>
+      <li>Procesy decyzyjne Markowa (MDP) w sztucznej inteligencji.</li>
+      <li>Prognozowanie rynków finansowych.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>Implementacja w Pythonie</h3>
+    <p>Oto krótki przykład implementacji Łańcuchów Markowa w Pythonie:</p>
+    <pre><code>import numpy as np
+
+# Definicja macierzy przejść
+transition_matrix = np.array([[0.7, 0.3], [0.4, 0.6]])
+
+# Stan początkowy
+state = np.array([0.5, 0.5])
+
+# Iteracja wartości
+for _ in range(100):
+    state = np.dot(state, transition_matrix)
+
+print("State after 100 iterations:", state)
+</code></pre>
+  </div>
+
+
+  <div class="section">
+    <h3>Wizualizacja Łańcucha Markowa</h3>
+    <img [src]="imageURL" alt="Markov Chain Image" class="markov-chain-image">
+  </div>
+
+  <div class="section">
+    <h3>Podsumowanie</h3>
+    <p>Łańcuchy Markowa są potężnym narzędziem do modelowania losowych procesów, których zachowanie zależy od aktualnego stanu. Ich zastosowania są nieograniczone, a ich analiza może prowadzić do cennych wniosków i prognoz.</p>
+  </div>
+</div>
+
+
+
+
