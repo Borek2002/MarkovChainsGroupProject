@@ -22,8 +22,16 @@ export class NavComponent implements OnInit{
   toggleSidebar(){
     this.navService.toggleSidebar();
   }
-  ChangeLang(selectedLanguage: string){
+  // ChangeLang(selectedLanguage: string){
+  //   localStorage.setItem('lang',selectedLanguage);
+  //   this.translateService.use(selectedLanguage);
+  // }
+  ChangeLang(lang:any){
+    const selectedLanguage = lang.target.value;
+
     localStorage.setItem('lang',selectedLanguage);
+
     this.translateService.use(selectedLanguage);
+
   }
 }

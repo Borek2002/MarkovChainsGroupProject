@@ -17,10 +17,8 @@
       </li>
     </ul>
   </div>
-  <mat-form-field class="languageSelect" color="primary">
-    <mat-select [(value)]="lang" (selectionChange)="ChangeLang($event.value)">
-      <mat-option  [value]="'pl'">Polski</mat-option>
-      <mat-option  [value]="'en'">English</mat-option>
-    </mat-select>
-  </mat-form-field>
+  <select id="language" (change)="ChangeLang($event)" >
+    <option [selected]="lang==='pl'" value="pl">Polski</option>
+    <option [selected]="lang==='en'" value="en">English</option>
+  </select>
 </nav>
