@@ -98,7 +98,7 @@ export class GraphComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     this.setInterpolationType(this.curveType);
-    this.getMatrixAndVector();
+    this.getNodesAndEdges();
   }
 
   ngAfterViewInit() {
@@ -185,8 +185,8 @@ export class GraphComponent implements OnInit, OnDestroy, AfterViewInit {
     this.zoomToFit$.next(true);
   }
 
-  getMatrixAndVector() {
-    this.matrixAndVectorService.getMatrixAndVector().subscribe((data) => {
+  getNodesAndEdges() {
+    this.matrixAndVectorService.getNodesAndEdges().subscribe((data) => {
       this.graph.nodes = data.nodes;
       this.graph.edges = data.edges;
       this.update$.next(true);

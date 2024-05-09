@@ -13,6 +13,7 @@ import { MatrixAndVector } from '../../model/matrixAndVector';
 import { MatrixAndVectorService } from '../../service/matrix-and-vector-service';
 import { Subscription } from 'rxjs';
 import { GraphDataService } from 'src/app/graph/data-access/GraphDataService';
+import { Matrix } from 'd3';
 
 @Component({
   selector: 'app-matrix-edit',
@@ -46,6 +47,19 @@ export class MatrixEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.matrixAndVectorService.getMatrixAndVector().subscribe(
+      (response) => {
+        if (response) {
+          this.data = response;
+        } else {
+          this.initializeMatrix();
+        }
+      },
+      (error) => {
+        console.error('An error occurred: ' + error);
+      }
+    );
+
     this.nodeHighlightSubscription =
       this.graphDataService.highlightedNode$.subscribe((nodeId) => {
         this.highlightedNode = nodeId;
@@ -53,7 +67,6 @@ export class MatrixEditComponent implements OnInit {
     this.edgeHighlightSubscription =
       this.graphDataService.highlightedLink$.subscribe((edge) => {
         this.highlightedEdge = edge;
-        console.log(this.highlightedEdge);
       });
   }
 

@@ -1,34 +1,37 @@
 import {
-    ChangeDetectorRef,
-    Component,
-    ElementRef,
-    OnInit,
-    ViewChild
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
 } from '@angular/core';
-import {
-    Edge, Graph,
-    Node,
-} from '@swimlane/ngx-graph';
-import {Subject} from "rxjs";
-import {NavService} from "../component/nav/nav.service";
-import {GraphDataService} from "src/app/graph/data-access/GraphDataService"
-import {GraphComponent} from "./ui/graph.component";
-import {MatrixAndVectorService} from "../matrix/service/matrix-and-vector-service";
-import {ActivatedRoute} from "@angular/router";
+import { Edge, Graph, Node } from '@swimlane/ngx-graph';
+import { Subject } from 'rxjs';
+import { NavService } from '../component/nav/nav.service';
+import { GraphDataService } from 'src/app/graph/data-access/GraphDataService';
+import { GraphComponent } from './ui/graph.component';
+import { MatrixAndVectorService } from '../matrix/service/matrix-and-vector-service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-graph-page',
   templateUrl: './graph-page.component.html',
-  styleUrls: ['./graph-page.component.css']
+  styleUrls: ['./graph-page.component.css'],
 })
-export class GraphPageComponent implements OnInit{
+export class GraphPageComponent implements OnInit {
   @ViewChild('graphContainer') graphContainer!: ElementRef;
   @ViewChild(GraphComponent) graphComponent!: GraphComponent;
   sidebarOpened: boolean = true;
 
   curveType: string = 'curveBundle';
 
-  interpolationTypes = ['Bundle', 'Cardinal', 'Catmull Rom', 'Monotone X', 'Natural'];
+  interpolationTypes = [
+    'Bundle',
+    'Cardinal',
+    'Catmull Rom',
+    'Monotone X',
+    'Natural',
+  ];
 
   panOnZoom: boolean = false;
   autoZoom: boolean = false;
@@ -39,18 +42,22 @@ export class GraphPageComponent implements OnInit{
 
   graph: Graph = {
     nodes: [],
-    edges: []
-  }
+    edges: [],
+  };
 
   // Deklaracja obiektu Subject do wywoływania aktualizacji widoku
   private updateGraph$: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private cdr: ChangeDetectorRef, private navService: NavService, private graphDataService: GraphDataService, private matrixAndVectorService: MatrixAndVectorService) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private navService: NavService,
+    private graphDataService: GraphDataService,
+    private matrixAndVectorService: MatrixAndVectorService
+  ) {}
 
   toggleSidebar() {
-      this.sidebarOpened = !this.sidebarOpened;
+    this.sidebarOpened = !this.sidebarOpened;
   }
-
 
   ngOnInit() {
     this.navService.toggleSidebarEvent.subscribe(() => {
@@ -58,30 +65,30 @@ export class GraphPageComponent implements OnInit{
     });
   }
 
-  getMatrixAndVector(){
-    this.graphComponent.getMatrixAndVector();
+  getNodesAndEdges() {
+    this.graphComponent.getNodesAndEdges();
   }
 
-  setInterpolationType(curveType:any){
+  setInterpolationType(curveType: any) {
     this.graphComponent.setInterpolationType(curveType);
   }
 
-  updateGraph(){
+  updateGraph() {
     this.graphComponent.updateGraph();
   }
 
-  centerGraph(){
+  centerGraph() {
     this.graphComponent.centerGraph();
   }
 
-  zoomToFit(){
+  zoomToFit() {
     this.graphComponent.zoomToFit();
   }
 
   updateGraphData() {
-    this.matrixAndVectorService.getMatrixAndVector().subscribe(data => {
+    this.matrixAndVectorService.getNodesAndEdges().subscribe((data) => {
       this.graph = data;
-    })
+    });
   }
 
   protected readonly GraphComponent = GraphComponent;
