@@ -68,7 +68,9 @@ export class GraphComponent implements OnInit, OnDestroy, AfterViewInit {
   private selectedNode: Node | null = null;
   private selectedEdge: Edge | null = null;
 
+  hoveredEdge: Edge | null = null;
   @Output() nodeHover: EventEmitter<string> = new EventEmitter<string>();
+  @Output() edgeHover: EventEmitter<string> = new EventEmitter<string>();
 
   setInterpolationType(curveType: any) {
     this.curveType = curveType;
@@ -141,7 +143,6 @@ export class GraphComponent implements OnInit, OnDestroy, AfterViewInit {
   handleNodeMouseEnter(node: Node) {
     node.data.hover = true;
     this.graphDataService.updateHighlightedNode(node.id);
-    this.nodeHover.emit(node.id);
   }
 
   handleNodeMouseLeave(node: Node) {
@@ -151,6 +152,16 @@ export class GraphComponent implements OnInit, OnDestroy, AfterViewInit {
 
   handleEdgeDoubleClick(edge: Edge) {
     this.selectedEdge = edge;
+  }
+
+  handleEdgeMouseEnter(edge: Edge) {
+    this.hoveredEdge = edge;
+    this.graphDataService.updateHighlightedLink(edge.source, edge.target);
+  }
+
+  handleEdgeMouseLeave(edge: Edge) {
+    this.hoveredEdge = null;
+    this.graphDataService.updateHighlightedLink('-1', '-1');
   }
 
   getLineWidth(label: string): number {

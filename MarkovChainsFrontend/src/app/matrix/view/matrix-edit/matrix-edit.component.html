@@ -16,7 +16,12 @@
         <td *ngFor="let field of item | keyvalue; let j = index">
           <input
             type="number"
-            [ngClass]="{ highlighted: j === this.highlightedNode - 1 }"
+            [ngClass]="{
+              highlighted:
+                j === this.highlightedNode - 1 ||
+                (i === this.highlightedEdge.source - 1 &&
+                  j === this.highlightedEdge.target - 1)
+            }"
             inputmode="none"
             [(ngModel)]="field.value"
             (blur)="onCellMatrixBlur(field.value, i, j)"

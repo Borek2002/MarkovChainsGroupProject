@@ -28,7 +28,12 @@ export class MatrixEditComponent implements OnInit {
   matrix: number[][] = [];
   initialVector: number[] = [];
   highlightedNode: string = '';
-  private subscription: Subscription = new Subscription();
+  highlightedEdge: { source: string; target: string } = {
+    source: '',
+    target: '',
+  };
+  private nodeHighlightSubscription: Subscription = new Subscription();
+  private edgeHighlightSubscription: Subscription = new Subscription();
 
   @Output() graphUpdated = new EventEmitter<void>();
 
@@ -41,16 +46,20 @@ export class MatrixEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.subscription = this.graphDataService.highlightedNode$.subscribe(
-      (nodeId) => {
+    this.nodeHighlightSubscription =
+      this.graphDataService.highlightedNode$.subscribe((nodeId) => {
         this.highlightedNode = nodeId;
-        console.log(this.highlightedNode);
-      }
-    );
+      });
+    this.edgeHighlightSubscription =
+      this.graphDataService.highlightedLink$.subscribe((edge) => {
+        this.highlightedEdge = edge;
+        console.log(this.highlightedEdge);
+      });
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.nodeHighlightSubscription.unsubscribe();
+    this.edgeHighlightSubscription.unsubscribe();
   }
 
   highlightNode(nodeId: string) {
