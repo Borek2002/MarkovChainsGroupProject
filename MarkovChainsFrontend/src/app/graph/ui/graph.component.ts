@@ -35,9 +35,9 @@ export class GraphComponent implements OnInit, OnDestroy, AfterViewInit {
     zoomSpeed: number = 0.1;
     minZoomLevel: number = 0.1;
     maxZoomLevel: number = 4.0;
-    panOnZoom: boolean = false;
-    autoZoom: boolean = false;
-    autoCenter: boolean = false;
+    @Input() panOnZoom: boolean = false;
+    @Input() autoZoom: boolean = false;
+    @Input() autoCenter: boolean = false;
 
     update$: Subject<boolean> = new Subject();
     center$: Subject<boolean> = new Subject();

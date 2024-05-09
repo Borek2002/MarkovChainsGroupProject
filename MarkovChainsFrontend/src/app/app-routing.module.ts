@@ -7,15 +7,22 @@ import { TheoryComponent } from './theory/theory.component';
 const routes: Routes = [
   {
     component: MatrixEditComponent,
-    path: "matrix"
+    path: "matrix",
+    data: {showHamburgerMenu: false}
   },
   {
     component: GraphPageComponent,
-    path: "graph"
+    path: "graph",
+    data: {showHamburgerMenu: true}
   },
   {
     component:TheoryComponent,
-    path:"theory"
+    path:"theory",
+    data: {showHamburgerMenu: false}
+  },
+  {
+    path:"**",
+    redirectTo:"/matrix"
   }
 ];
 

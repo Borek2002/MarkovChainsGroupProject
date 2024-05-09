@@ -1,0 +1,18 @@
+body {
+  font-size: 9px; /* Ustawienie mniejszej wielkości czcionki */
+}
+input {
+  width: 8vw; /* Ustawienie mniejszej szerokości */
+  height: 4vh; /* Ustawienie mniejszej wysokości */
+  font-size: 4vh;
+}
+
+button {
+   font-size: 2vh/* Ustawienie mniejszej szerokości bordera */
+}
+
+/* Ustawienie mniejszej wysokości linii */
+p {
+  line-height: 1.2; /* Ustawienie mniejszej wysokości linii */
+}
+

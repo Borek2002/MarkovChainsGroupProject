@@ -14,6 +14,7 @@ import {NavService} from "../component/nav/nav.service";
 import {GraphDataService} from "src/app/graph/data-access/GraphDataService"
 import {GraphComponent} from "./ui/graph.component";
 import {MatrixAndVectorService} from "../matrix/service/matrix-and-vector-service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-graph-page',
@@ -65,15 +66,6 @@ export class GraphPageComponent implements OnInit{
     this.graphComponent.setInterpolationType(curveType);
   }
 
-  onCreateNodeClick() {
-    const newNode: Node = {
-      id: '' + (this.graphDataService.getNodes().length + 1),
-      label: 'S',
-    };
-    this.graphDataService.addNode(newNode);
-    this.graphComponent.updateGraph();
-  }
-
   updateGraph(){
     this.graphComponent.updateGraph();
   }
@@ -86,14 +78,11 @@ export class GraphPageComponent implements OnInit{
     this.graphComponent.zoomToFit();
   }
 
-  onCreateEdgeClick() {
-    this.graphComponent.toggleCreateEdgeMode();
-  }
-
   updateGraphData() {
     this.matrixAndVectorService.getMatrixAndVector().subscribe(data => {
       this.graph = data;
     })
   }
 
+  protected readonly GraphComponent = GraphComponent;
 }
