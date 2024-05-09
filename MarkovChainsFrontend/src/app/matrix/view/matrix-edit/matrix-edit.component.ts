@@ -1,38 +1,65 @@
-import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
-import {MatDialog} from "@angular/material/dialog";
-import {ValidationRowModalComponent} from "../validation-row-modal/validation-row-modal.component";
-import {Node, Edge, Graph} from "@swimlane/ngx-graph";
-import {MatrixAndVector} from "../../model/matrixAndVector";
-import {MatrixAndVectorService} from "../../service/matrix-and-vector-service";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ValidationRowModalComponent } from '../validation-row-modal/validation-row-modal.component';
+import { Node, Edge, Graph } from '@swimlane/ngx-graph';
+import { MatrixAndVector } from '../../model/matrixAndVector';
+import { MatrixAndVectorService } from '../../service/matrix-and-vector-service';
+import { Subscription } from 'rxjs';
+import { GraphDataService } from 'src/app/graph/data-access/GraphDataService';
 
 @Component({
   selector: 'app-matrix-edit',
   templateUrl: './matrix-edit.component.html',
-  styleUrls: ['./matrix-edit.component.css']
+  styleUrls: ['./matrix-edit.component.css'],
 })
-
-export class MatrixEditComponent implements OnInit{
+export class MatrixEditComponent implements OnInit {
   rowsAndColumns: number = 3;
-  data: MatrixAndVector = {transitionMatrix: [], initialVector: []};
+  data: MatrixAndVector = { transitionMatrix: [], initialVector: [] };
   finalProbability: number[] = [];
   probabilityAfterNSteps: number[] = [];
   stationaryProbability: number[] = [];
   matrix: number[][] = [];
-  initialVector: number[]=[];
+  initialVector: number[] = [];
+  highlightedNode: string = '';
+  private subscription: Subscription = new Subscription();
 
   @Output() graphUpdated = new EventEmitter<void>();
 
-  constructor(private matrixAndVectorService: MatrixAndVectorService,
-              public dialog: MatDialog) {
+  constructor(
+    private matrixAndVectorService: MatrixAndVectorService,
+    private graphDataService: GraphDataService,
+    public dialog: MatDialog
+  ) {
     this.initializeMatrix();
   }
 
   ngOnInit(): void {
+    this.subscription = this.graphDataService.highlightedNode$.subscribe(
+      (nodeId) => {
+        this.highlightedNode = nodeId;
+        console.log(this.highlightedNode);
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  highlightNode(nodeId: string) {
+    this.highlightedNode = nodeId;
   }
 
   initializeMatrix() {
     this.data.transitionMatrix = [];
-    this.data.initialVector = []
+    this.data.initialVector = [];
     for (let i = 0; i < this.rowsAndColumns; i++) {
       let row = [];
       /*let rowSum = 0; // sum of elements in the row
@@ -66,23 +93,23 @@ export class MatrixEditComponent implements OnInit{
   }
   onCellMatrixBlur(value: any, rowIndex: number, colIndex: number) {
     this.data.transitionMatrix[rowIndex][colIndex] = value;
-    console.log(value)
+    console.log(value);
   }
 
   onCellVectorBlur(value: any, colIndex: number) {
     this.data.initialVector[colIndex] = value;
-    console.log(value)
+    console.log(value);
   }
 
   onSave() {
     if (this.validateMatrixRowSumToOne()) {
-      console.log("Zapisano zmiany: ", this.data.transitionMatrix);
+      console.log('Zapisano zmiany: ', this.data.transitionMatrix);
       this.matrixAndVectorService.putVectorAndMatrix(this.data!).subscribe(
-        response => {
+        (response) => {
           console.log('Response:', response);
           this.graphUpdated.emit();
         },
-        error => {
+        (error) => {
           console.error('Error:', error);
         }
       );
@@ -90,24 +117,30 @@ export class MatrixEditComponent implements OnInit{
   }
 
   onFinalProbability() {
-    this.matrixAndVectorService.getFinalProbability()
-      .subscribe(result => this.finalProbability = result);
+    this.matrixAndVectorService
+      .getFinalProbability()
+      .subscribe((result) => (this.finalProbability = result));
   }
 
   onProbabilityAfterNSteps() {
-    this.matrixAndVectorService.getProbabilityAfterNSteps()
-      .subscribe(result => this.probabilityAfterNSteps = result);
+    this.matrixAndVectorService
+      .getProbabilityAfterNSteps()
+      .subscribe((result) => (this.probabilityAfterNSteps = result));
   }
 
   onStationaryProbability() {
-    this.matrixAndVectorService.getStationaryProbability()
-      .subscribe(result => this.stationaryProbability = result);
+    this.matrixAndVectorService
+      .getStationaryProbability()
+      .subscribe((result) => (this.stationaryProbability = result));
   }
 
   validateMatrixRowSumToOne(): boolean {
     let isValid = true;
     for (let i = 0; i < this.rowsAndColumns; i++) {
-      const rowSum = this.data.transitionMatrix[i].reduce((sum, value) => sum + value, 0);
+      const rowSum = this.data.transitionMatrix[i].reduce(
+        (sum, value) => sum + value,
+        0
+      );
       if (Math.abs(rowSum - 1) > 0.0001) {
         isValid = false;
         break;
@@ -115,16 +148,28 @@ export class MatrixEditComponent implements OnInit{
     }
     if (!isValid) {
       this.dialog.open(ValidationRowModalComponent, {
-        data: {title: 'Błąd walidacji', message: 'Proszę poprawić macierz, aby suma każdego wiersza wynosiła 1.'}
+        data: {
+          title: 'Błąd walidacji',
+          message:
+            'Proszę poprawić macierz, aby suma każdego wiersza wynosiła 1.',
+        },
       });
     }
     return isValid;
   }
 
-
-  moveMatrixFocus(rowIndex: number, colIndex: number, event: KeyboardEvent): void {
+  moveMatrixFocus(
+    rowIndex: number,
+    colIndex: number,
+    event: KeyboardEvent
+  ): void {
     event.preventDefault();
-    if (rowIndex >= 0 && rowIndex < this.data.transitionMatrix.length && colIndex >= 0 && colIndex < this.data.transitionMatrix[0].length) {
+    if (
+      rowIndex >= 0 &&
+      rowIndex < this.data.transitionMatrix.length &&
+      colIndex >= 0 &&
+      colIndex < this.data.transitionMatrix[0].length
+    ) {
       const inputId = 'matrixInput_' + rowIndex + '_' + colIndex;
       const inputElement = document.getElementById(inputId) as HTMLInputElement;
       if (inputElement) {
@@ -143,5 +188,4 @@ export class MatrixEditComponent implements OnInit{
       }
     }
   }
-
 }

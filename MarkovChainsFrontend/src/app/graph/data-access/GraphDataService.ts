@@ -1,17 +1,22 @@
-import {Injectable} from "@angular/core";
-import {Edge, Graph, Node} from "@swimlane/ngx-graph";
-import {HttpClient} from "@angular/common/http";
-import {map} from "rxjs";
+import { Injectable } from '@angular/core';
+import { Edge, Graph, Node } from '@swimlane/ngx-graph';
+import { HttpClient } from '@angular/common/http';
+import { Subject, map } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GraphDataService {
   private nodes: Node[] = [];
   private links: Edge[] = [];
-
+  private highlightedNodeSubject: Subject<string> = new Subject<string>();
+  highlightedNode$ = this.highlightedNodeSubject.asObservable();
 
   constructor(private http: HttpClient) {}
+
+  updateHighlightedNode(nodeId: string) {
+    this.highlightedNodeSubject.next(nodeId);
+  }
 
   getNodes(): Node[] {
     return this.nodes;
@@ -33,5 +38,4 @@ export class GraphDataService {
   addEdge(newEdge: Edge) {
     this.links.push(newEdge);
   }
-
 }

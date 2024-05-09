@@ -3,32 +3,39 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-div, table, h1{
+div,
+table,
+h1 {
   display: grid;
   place-items: center;
 }
 
-label{
+label {
   font-size: 110%;
 }
 
-td input{
+td input {
   width: 2vw;
   height: 2vw;
-  background-color: #B7E4C7;
   border-radius: 5px;
+  background-color: #d8f3dc;
   text-align: center;
 }
-.inputOutputValues input{
+.inputOutputValues input {
   background-color: #d8f3dc;
   border-radius: 5px;
   text-align: center;
 }
-#calculationButtons{
+
+td input.highlighted {
+  background-color: green;
+}
+
+#calculationButtons {
   display: inline;
   justify-content: center;
 }
-.columnButtonAndOutput{
+.columnButtonAndOutput {
   display: flex;
   flex-direction: column; /* Ustawia elementy w pionie */
   align-items: center;
@@ -41,6 +48,6 @@ button {
   border-radius: 8px;
   margin: 5px 0 5px 0;
 }
-button:hover{
+button:hover {
   background-color: #52b788;
 }
