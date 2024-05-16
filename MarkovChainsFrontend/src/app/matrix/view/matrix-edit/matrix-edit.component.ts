@@ -144,4 +144,10 @@ export class MatrixEditComponent implements OnInit{
     }
   }
 
+
+  handleClick(): void {
+    // Kod obsługi kliknięcia
+    console.log('Przycisk został kliknięty!');
+  }
+
 }
