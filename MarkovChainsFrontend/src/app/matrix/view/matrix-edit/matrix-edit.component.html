@@ -1,12 +1,13 @@
 <h1>{{'macierzIWektor' | translate}}</h1>
 
 <div class="inputOutputValues">
-  <label>{{'iloscKolumnIWierszy' | translate}}</label>
+  <label>{{'iloscKolumnIWierszy' | translate}} <span class="custom-button" [matTooltip]="'rowsAndCols_description' | translate">?</span> </label>
+
   <input type="number" [(ngModel)]="rowsAndColumns" (change)="initializeMatrix()">
 </div>
 <br>
 <div>
-  <label>{{'macierz' | translate}}</label>
+  <label>{{'macierz' | translate}} <span class="custom-button" [matTooltip]="'matrix_tooltip' | translate">?</span> </label>
   <table id="matrix">
     <tr *ngFor="let item of data.transitionMatrix; let i = index">
       <td *ngFor="let field of item| keyvalue;let j = index ">
@@ -21,7 +22,7 @@
   </table>
 </div>
 <div>
-  <label> {{'wektor' | translate}}</label>
+  <label> {{'wektor' | translate}} <span class="custom-button" [matTooltip]="'initial_vector_tooltip' | translate">?</span></label>
   <table id="vector">
     <tr>
       <td *ngFor="let item of data.initialVector| keyvalue;let k = index ">

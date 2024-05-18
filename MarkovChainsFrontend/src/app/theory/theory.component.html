@@ -1,0 +1,67 @@
+<div class="container">
+  <h2>{{ 'markov_chains' | translate }}</h2>
+
+  <div class="section">
+    <h3>{{ 'introduction_title' | translate }}</h3>
+    <p>{{ 'markov_chains_introduction' | translate }}</p>
+  </div>
+
+  <div class="section">
+    <h3>{{ 'basic_concepts_title' | translate }}</h3>
+    <ul>
+      <li><strong>{{ 'state' | translate }}</strong> {{ 'state_definition' | translate }}</li>
+      <li><strong>{{ 'transition_matrix' | translate }}</strong> {{ 'transition_matrix_definition' | translate }}</li>
+      <li><strong>{{ 'transition_probability' | translate }}</strong> {{ 'transition_probability_definition' | translate }}</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>{{ 'markov_properties_title' | translate }}</h3>
+    <ul>
+      <li><strong>{{ 'ergodicity' | translate }}</strong> {{ 'ergodicity_description' | translate }}</li>
+      <li><strong>{{ 'stationarity' | translate }}</strong> {{ 'stationarity_description' | translate }}</li>
+    </ul>
+  </div>
+
+
+  <div class="section">
+    <h3>{{ 'applications_examples' | translate }}</h3>
+    <ul>
+      <li><strong>{{ 'finance' | translate }}:</strong> {{ 'finance_description' | translate }}</li><br>
+      <li><strong>{{ 'social_sciences' | translate }}:</strong> {{ 'social_sciences_description' | translate }}</li><br>
+      <li><strong>{{ 'biology' | translate }}:</strong> {{ 'biology_description' | translate }}</li><br>
+      <li><strong>{{ 'engineering' | translate }}:</strong> {{ 'engineering_description' | translate }}</li><br>
+      <li><strong>{{ 'computer_science' | translate }}:</strong> {{ 'computer_science_description' | translate }}</li><br>
+      <li><strong>{{ 'telecommunications' | translate }}:</strong> {{ 'telecommunications_description' | translate }}</li><br>
+    </ul>
+  </div>
+
+
+
+
+  <div class="section">
+    <h3>{{ 'markov_visualization_title' | translate }}</h3>
+    <ul>
+      <p>{{ 'weather_relations_description' | translate }}</p>
+      <img [src]="imageURL" alt="Markov Chain Image" class="markov-chain-image">
+      <p>{{ 'fractional_relations_description' | translate }}</p>
+      <img [src]="image2URL" alt="Markov Chain Image" class="markov-chain-image">
+      <p>{{ 'transition_matrix_description' | translate }}</p>
+      <img [src]="image3URL" alt="Markov Chain Image" class="markov-chain-image"> <span class="custom-button" [matTooltip]="'transition_probabilities_sum_description' | translate">?</span>
+      <p>{{ 'irreversible_state_description' | translate }}</p>
+      <p>{{ 'absorbing_state_description' | translate }}</p>
+    </ul>
+  </div>
+
+
+
+
+  <div class="section">
+    <h3>{{ 'summary_title' | translate }}</h3>
+    <p>{{ 'markov_chains_description' | translate }}</p>
+  </div>
+</div>
+
+
+
+
