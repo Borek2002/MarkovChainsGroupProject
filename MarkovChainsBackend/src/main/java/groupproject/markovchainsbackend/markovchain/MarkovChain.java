@@ -39,15 +39,20 @@ public class MarkovChain {
         double epsilon = 1e-10;
 
         int dimension = transitionMatrix.getRowDimension();
-        RealVector initialGuess = new ArrayRealVector(new double[dimension]).mapAddToSelf(1.0);
-        initialGuess.mapMultiplyToSelf(1.0 / dimension);
+        RealVector initialGuess = new ArrayRealVector(new double[dimension]);
+        initialGuess.mapAddToSelf(1.0 / dimension); // Uniform initial guess
 
         for (int i = 0; i < maxIterations; i++) {
             RealVector nextGuess = transitionMatrix.operate(initialGuess);
 
+            // Normalize nextGuess
+            nextGuess = nextGuess.mapDivide(nextGuess.getL1Norm());
+
+            // Check for convergence
             if (nextGuess.subtract(initialGuess).getNorm() < epsilon) {
-                return nextGuess.mapDivide(nextGuess.getL1Norm());
+                return nextGuess;
             }
+
             initialGuess = nextGuess;
         }
         throw new RuntimeException("Błąd przy wyliczeniu prawdopodobieństwa stacjonarnego");

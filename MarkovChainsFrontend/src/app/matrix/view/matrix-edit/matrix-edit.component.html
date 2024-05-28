@@ -49,6 +49,7 @@
   <div>
     <div class="columnButtonAndOutput">
       <button mat-raised-button color="primary" (click)="onProbabilityAfterNSteps()">{{'obliczPrawdopodobieństwoPoNKrokach' | translate}}</button>
+      <input id="nSteps" [(ngModel)]=nSteps>
       <div *ngIf="probabilityAfterNSteps.length > 0">
         <p>[{{ probabilityAfterNSteps.join(', ') }}]</p>
       </div>
