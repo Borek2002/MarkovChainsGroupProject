@@ -28,6 +28,7 @@ export class MatrixEditComponent implements OnInit {
   finalProbability: number[] = [];
   probabilityAfterNSteps: number[] = [];
   stationaryProbability: number[] = [];
+  immersiveState:number=-2;
   matrix: number[][] = [];
   initialVector: number[] = [];
   highlightedNode: string = '';
@@ -137,6 +138,11 @@ export class MatrixEditComponent implements OnInit {
     this.matrixAndVectorService
       .getStationaryProbability()
       .subscribe((result) => (this.stationaryProbability = result));
+  }
+
+  onImmersiveState(){
+    this.matrixAndVectorService.getImmersiveState()
+      .subscribe((result)=>this.immersiveState=result)
   }
 
   validateMatrixRowSumToOne(): boolean {

@@ -91,10 +91,17 @@
     </div>
 
     <div class="columnButtonAndOutput">
-      <button mat-raised-button color="primary">
+      <button mat-raised-button color="primary" (click)="onImmersiveState()">
         {{ "stanPochlaniajacy" | translate }}
       </button>
-      <div></div>
+      <div *ngIf="immersiveState!=-2">
+          <div *ngIf="immersiveState==-1">
+            <p>{{"no_immersive_state" | translate }}</p>
+          </div>
+          <div *ngIf="immersiveState!=-1">
+            <p>{{"state" | translate }} {{immersiveState}}</p>
+          </div>
+      </div>
     </div>
   </div>
   <div>
