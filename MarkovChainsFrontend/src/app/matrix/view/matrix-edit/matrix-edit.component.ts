@@ -44,25 +44,10 @@ export class MatrixEditComponent implements OnInit{
       }
       this.data.transitionMatrix.push(column);
     }
-
-    // Transpose the matrix to convert to row-major format
-
-
     // Initialize the initial vector with zeros
     for (let i = 0; i < this.rowsAndColumns; i++) {
       this.data.initialVector.push(0.0);
     }
-  }
-
-  transposeMatrix(matrix: number[][]): number[][] {
-    let transposed: number[][] = [];
-    for (let i = 0; i < matrix[0].length; i++) {
-      transposed[i] = [];
-      for (let j = 0; j < matrix.length; j++) {
-        transposed[i][j] = matrix[j][i];
-      }
-    }
-    return transposed;
   }
 
   onCellMatrixBlur(value: any, rowIndex: number, colIndex: number) {
@@ -77,15 +62,13 @@ export class MatrixEditComponent implements OnInit{
 
   onSave() {
     if (this.validateMatrixRowSumToOne()) {
-      this.convertedData.transitionMatrix = this.transposeMatrix(this.data.transitionMatrix);
-      this.convertedData.initialVector=this.data.initialVector;
-      console.log("Zapisano zmiany: ", this.convertedData.transitionMatrix);
-      this.matrixAndVectorService.putVectorAndMatrix(this.convertedData!).subscribe(
-        response => {
+      console.log('Zapisano zmiany: ', this.data.transitionMatrix);
+      this.matrixAndVectorService.putVectorAndMatrix(this.data!).subscribe(
+        (response) => {
           console.log('Response:', response);
           this.graphUpdated.emit();
         },
-        error => {
+        (error) => {
           console.error('Error:', error);
         }
       );

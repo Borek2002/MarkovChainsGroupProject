@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.catalina.Realm;
 import org.apache.commons.math3.linear.*;
 import org.springframework.stereotype.Component;
 
@@ -26,10 +27,11 @@ public class MarkovChain {
     }
 
     public RealVector calculateProbabilityVectorAfterNSteps(int n) {
+        RealMatrix transposedMatrix = transitionMatrix.transpose();
         RealVector result = initialVector;
 
         for (int i = 0; i < n; i++) {
-            result = transitionMatrix.operate(result);
+            result = transposedMatrix.operate(result);
         }
         return result;
     }
@@ -37,13 +39,13 @@ public class MarkovChain {
     public RealVector calculateStationaryDistribution() {  //metoda potęgowa
         int maxIterations = 1000;
         double epsilon = 1e-10;
-
-        int dimension = transitionMatrix.getRowDimension();
+        RealMatrix transposedMatrix = transitionMatrix.transpose();
+        int dimension = transposedMatrix.getRowDimension();
         RealVector initialGuess = new ArrayRealVector(new double[dimension]);
         initialGuess.mapAddToSelf(1.0 / dimension); // Uniform initial guess
 
         for (int i = 0; i < maxIterations; i++) {
-            RealVector nextGuess = transitionMatrix.operate(initialGuess);
+            RealVector nextGuess = transposedMatrix.operate(initialGuess);
 
             // Normalize nextGuess
             nextGuess = nextGuess.mapDivide(nextGuess.getL1Norm());
@@ -88,8 +90,9 @@ public class MarkovChain {
     }
 
     public RealVector calculateFinalProbabilityVector() {
+        RealMatrix transposedMatrix = transitionMatrix.transpose();
         // Obliczanie wartości własnych i wektorów własnych
-        EigenDecomposition eigenDecomposition = new EigenDecomposition(transitionMatrix);
+        EigenDecomposition eigenDecomposition = new EigenDecomposition(transposedMatrix);
 
         // Pobieranie macierzy wektorów własnych
         RealMatrix eigenvectorMatrix = eigenDecomposition.getV();
@@ -108,7 +111,7 @@ public class MarkovChain {
 
         // Wyświetlanie wyników
         System.out.println("Macierz A:");
-        MarkovChain.printMatrix(transitionMatrix);
+        MarkovChain.printMatrix(transposedMatrix);
 
         System.out.println("Macierz diagonalna D:");
         MarkovChain.printMatrix(diagonalMatrix);
