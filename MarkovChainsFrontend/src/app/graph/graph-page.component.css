@@ -44,3 +44,75 @@ mat-checkbox {
   margin-top: 5px;
 }
 
+.container {
+  position: relative;
+  width: 300px;
+  height: 100%;
+}
+
+.simulation {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  bottom: 20px;
+  left: -500px;
+  width: auto;
+  background-color: #ffffff;
+  border-radius: 10px;
+  transition: left 1s ease;
+  overflow: hidden;
+}
+
+.simulation.expanded {
+  left: 50%;
+    transform: translateX(-50%);
+}
+
+button img {
+  width: 30px; /* Ustal odpowiednią szerokość obrazka */
+  height: auto; /* Zachowaj proporcje obrazka */
+  display: block; /* Upewnij się, że obrazek jest wyświetlany jako blok */
+}
+
+.simulation_button{
+  position: absolute;
+    display: flex;
+    bottom: 20px;
+    left: 1%;
+    width: auto;
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+
+#range {
+  width: 50%; /* Ustal szerokość suwaka według własnych potrzeb */
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+button {
+  flex-grow: 1;
+  padding: 10px;
+  text-align: center;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #ccc;
+}
+
+.edge-path {
+  transition: stroke 0.3s ease;
+}
+
+.edge-path:hover {
+  stroke: red;
+}
+
+

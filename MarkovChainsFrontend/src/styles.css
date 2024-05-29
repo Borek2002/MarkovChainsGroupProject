@@ -1,3 +1,4 @@
+
 html{
   background: #9ebda9;
 }
@@ -7,3 +8,17 @@ html{
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
+
+.custom-button {
+  display: inline-block;
+  padding: 1px 2px;
+  background-color: rgba(0, 42, 255, 0.36);
+  color: rgba(255, 255, 255, 0.62);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.custom-button:hover {
+  background-color: #0056b3;
+}
