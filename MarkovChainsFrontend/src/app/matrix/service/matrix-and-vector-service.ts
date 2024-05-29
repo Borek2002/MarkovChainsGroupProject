@@ -14,8 +14,8 @@ export class MatrixAndVectorService {
     return this.http.get<number[]>('/markovchain/finalProbability');
   }
 
-  getProbabilityAfterNSteps(): Observable<number[]> {
-    return this.http.get<number[]>('/markovchain/finalProbability');
+  getProbabilityAfterNSteps(steps: number): Observable<number[]>{
+    return this.http.get<number[]>('/markovchain/probabilityAfterNSteps?steps='+steps);
   }
 
   getStationaryProbability(): Observable<number[]> {

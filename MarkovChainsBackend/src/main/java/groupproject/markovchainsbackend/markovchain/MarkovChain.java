@@ -5,10 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.catalina.Realm;
 import org.apache.commons.math3.linear.*;
 import org.springframework.stereotype.Component;
 
-import javax.management.ConstructorParameters;
 
 @Getter
 @Setter
@@ -19,6 +19,7 @@ public class MarkovChain {
     private RealMatrix transitionMatrix;
     private RealVector initialVector;
     private int steps;
+    private int currentState = -1;
 
     public MarkovChain(RealMatrix transitionMatrix, RealVector initialVector) {
         this.transitionMatrix = transitionMatrix;
@@ -26,10 +27,11 @@ public class MarkovChain {
     }
 
     public RealVector calculateProbabilityVectorAfterNSteps(int n) {
+        RealMatrix transposedMatrix = transitionMatrix.transpose();
         RealVector result = initialVector;
 
         for (int i = 0; i < n; i++) {
-            result = transitionMatrix.operate(result);
+            result = transposedMatrix.operate(result);
         }
         return result;
     }
@@ -37,17 +39,22 @@ public class MarkovChain {
     public RealVector calculateStationaryDistribution() {  //metoda potęgowa
         int maxIterations = 1000;
         double epsilon = 1e-10;
-
-        int dimension = transitionMatrix.getRowDimension();
-        RealVector initialGuess = new ArrayRealVector(new double[dimension]).mapAddToSelf(1.0);
-        initialGuess.mapMultiplyToSelf(1.0 / dimension);
+        RealMatrix transposedMatrix = transitionMatrix.transpose();
+        int dimension = transposedMatrix.getRowDimension();
+        RealVector initialGuess = new ArrayRealVector(new double[dimension]);
+        initialGuess.mapAddToSelf(1.0 / dimension); // Uniform initial guess
 
         for (int i = 0; i < maxIterations; i++) {
-            RealVector nextGuess = transitionMatrix.operate(initialGuess);
+            RealVector nextGuess = transposedMatrix.operate(initialGuess);
 
+            // Normalize nextGuess
+            nextGuess = nextGuess.mapDivide(nextGuess.getL1Norm());
+
+            // Check for convergence
             if (nextGuess.subtract(initialGuess).getNorm() < epsilon) {
-                return nextGuess.mapDivide(nextGuess.getL1Norm());
+                return nextGuess;
             }
+
             initialGuess = nextGuess;
         }
         throw new RuntimeException("Błąd przy wyliczeniu prawdopodobieństwa stacjonarnego");
@@ -83,8 +90,9 @@ public class MarkovChain {
     }
 
     public RealVector calculateFinalProbabilityVector() {
+        RealMatrix transposedMatrix = transitionMatrix.transpose();
         // Obliczanie wartości własnych i wektorów własnych
-        EigenDecomposition eigenDecomposition = new EigenDecomposition(transitionMatrix);
+        EigenDecomposition eigenDecomposition = new EigenDecomposition(transposedMatrix);
 
         // Pobieranie macierzy wektorów własnych
         RealMatrix eigenvectorMatrix = eigenDecomposition.getV();
@@ -103,7 +111,7 @@ public class MarkovChain {
 
         // Wyświetlanie wyników
         System.out.println("Macierz A:");
-        MarkovChain.printMatrix(transitionMatrix);
+        MarkovChain.printMatrix(transposedMatrix);
 
         System.out.println("Macierz diagonalna D:");
         MarkovChain.printMatrix(diagonalMatrix);
@@ -131,6 +139,57 @@ public class MarkovChain {
         }
         return diagonalElements;
     }
+
+    public Integer simulate(int steps) {
+        System.out.println("Simulation started. Initial state: " + currentState);
+        if(currentState < 0){
+            double randomValue = Math.random();
+            double cumulativeProbability = 0.0;
+
+            for (int nextState = 0; nextState < initialVector.getDimension(); nextState++) {
+                cumulativeProbability += initialVector.getEntry(nextState);
+                System.out.println("vector" + nextState);
+                System.out.println("vector" + randomValue);
+                System.out.println("vector" + cumulativeProbability);
+                if (randomValue <= cumulativeProbability) {
+                    currentState = nextState + 1;
+                    return currentState;
+                }
+            }
+            // This should never happen if the transition matrix is correctly defined
+            throw new RuntimeException("Invalid transition probabilities");
+        }
+        else{
+            for (int i = 0; i < steps; i++) {
+                int nextState = getNextState();
+                System.out.println("Step " + (i + 1) + ": Moved from state " + currentState + " to state " + nextState);
+                currentState = nextState;
+            }
+            System.out.println("Simulation completed.");
+            return currentState;
+        }
+
+    }
+
+
+    private int getNextState() {
+        double[] probabilities = transitionMatrix.getRow(currentState-1);
+        double randomValue = Math.random();
+        double cumulativeProbability = 0.0;
+
+        for (int nextState = 0; nextState < probabilities.length; nextState++) {
+            cumulativeProbability += probabilities[nextState];
+            System.out.println(nextState);
+            System.out.println(randomValue);
+            System.out.println(cumulativeProbability);
+            if (randomValue <= cumulativeProbability) {
+                return nextState + 1;
+            }
+        }
+        // This should never happen if the transition matrix is correctly defined
+        throw new RuntimeException("Invalid transition probabilities");
+    }
+
 
     public MarkovRequest getMatrixAndVector(){
         return MarkovRequest.builder()
