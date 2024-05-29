@@ -1,52 +1,73 @@
-<h1>{{'macierzIWektor' | translate}}</h1>
-
-<div class="inputOutputValues">
-  <label>{{'iloscKolumnIWierszy' | translate}} <span class="custom-button" [matTooltip]="'rowsAndCols_description' | translate">?</span> </label>
-
-  <input type="number" [(ngModel)]="rowsAndColumns" (change)="initializeMatrix()">
-</div>
-<br>
 <div>
-  <label>{{'macierz' | translate}} <span class="custom-button" [matTooltip]="'matrix_tooltip' | translate">?</span> </label>
-  <table id="matrix">
-    <tr *ngFor="let item of data.transitionMatrix; let i = index">
-      <td *ngFor="let field of item| keyvalue;let j = index ">
-        <input type="number" inputmode="none" [(ngModel)]="field.value" (blur)="onCellMatrixBlur(field.value, i, j)"
-               [attr.id]="'matrixInput_' + i + '_' + j"
-               (keydown.arrowdown)="moveMatrixFocus(i + 1, j, $event)"
-               (keydown.arrowup)="moveMatrixFocus(i - 1, j, $event)"
-               (keydown.arrowleft)="moveMatrixFocus(i, j - 1, $event)"
-               (keydown.arrowright)="moveMatrixFocus(i, j + 1, $event)">
-      </td>
-    </tr>
-  </table>
-</div>
 <div>
-  <label> {{'wektor' | translate}} <span class="custom-button" [matTooltip]="'initial_vector_tooltip' | translate">?</span></label>
-  <table id="vector">
-    <tr>
-      <td *ngFor="let item of data.initialVector| keyvalue;let k = index ">
-        <input type="number" inputmode="none" [(ngModel)]="item.value" (blur)="onCellVectorBlur(item.value, k)"
-               [attr.id]="'vectorInput_'+k"
-               (keydown.arrowleft)="moveVectorFocus(k - 1, $event)"
-               (keydown.arrowright)="moveVectorFocus(k + 1, $event)">
-      </td>
-    </tr>
-  </table>
-  <button mat-raised-button color ="primary" (click)="onSave()">{{'Zapisz' | translate}}</button>
-</div >
+  <h1>{{ "macierzIWektor" | translate }}</h1>
 
-<br/>
-
-<div id="calculationButtons">
-  <div class="columnButtonAndOutput">
-    <button mat-raised-button color="primary" (click)="onFinalProbability()">{{'obliczPrawdopodobienstwoFinalne' | translate}}</button>
-    <div *ngIf="finalProbability.length > 0">
-      <p>[{{ finalProbability.join(', ') }}]</p>
-    </div>
+  <div class="inputOutputValues">
+    <label>{{ "iloscKolumnIWierszy" | translate }}</label>
+    <input
+      type="number"
+      [(ngModel)]="rowsAndColumns"
+      (change)="initializeMatrix()"
+    />
+  </div>
+  <div>
+    <label>{{ "macierz" | translate }}</label>
+    <table id="matrix">
+      <tr *ngFor="let item of data.transitionMatrix; let i = index">
+        <td *ngFor="let field of item | keyvalue; let j = index">
+          <input
+            type="number"
+            [ngClass]="{
+              highlighted:
+                j === this.highlightedNode - 1 ||
+                (i === this.highlightedEdge.source - 1 &&
+                  j === this.highlightedEdge.target - 1)
+            }"
+            inputmode="none"
+            [(ngModel)]="field.value"
+            (blur)="onCellMatrixBlur(field.value, i, j)"
+            [attr.id]="'matrixInput_' + i + '_' + j"
+            (keydown.arrowdown)="moveMatrixFocus(i + 1, j, $event)"
+            (keydown.arrowup)="moveMatrixFocus(i - 1, j, $event)"
+            (keydown.arrowleft)="moveMatrixFocus(i, j - 1, $event)"
+            (keydown.arrowright)="moveMatrixFocus(i, j + 1, $event)"
+          />
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div>
+    <label> {{ "wektor" | translate }}</label>
+    <table id="vector">
+      <tr>
+        <td *ngFor="let item of data.initialVector | keyvalue; let k = index">
+          <input
+            type="number"
+            inputmode="none"
+            [(ngModel)]="item.value"
+            (blur)="onCellVectorBlur(item.value, k)"
+            [attr.id]="'vectorInput_' + k"
+            (keydown.arrowleft)="moveVectorFocus(k - 1, $event)"
+            (keydown.arrowright)="moveVectorFocus(k + 1, $event)"
+          />
+        </td>
+      </tr>
+    </table>
+    <button mat-raised-button color="primary" (click)="onSave()">
+      {{ "Zapisz" | translate }}
+    </button>
   </div>
 
-  <div>
+  <div id="calculationButtons">
+    <div class="columnButtonAndOutput">
+      <button mat-raised-button color="primary" (click)="onFinalProbability()">
+        {{ "obliczPrawdopodobienstwoFinalne" | translate }}
+      </button>
+      <div *ngIf="finalProbability.length > 0">
+        <p>[{{ finalProbability.join(", ") }}]</p>
+      </div>
+    </div>
+
     <div class="columnButtonAndOutput">
       <button mat-raised-button color="primary" (click)="onProbabilityAfterNSteps()">{{'obliczPrawdopodobieństwoPoNKrokach' | translate}}</button>
       <input id="nSteps" [(ngModel)]=nSteps>
@@ -56,20 +77,27 @@
     </div>
   </div>
 
-  <div class="columnButtonAndOutput">
-    <button mat-raised-button color="primary" (click)="onStationaryProbability()">{{'obliczPrawdopodobieństwoStacjonarne' | translate}}</button>
-    <div *ngIf="stationaryProbability.length > 0">
-      <p>[{{ stationaryProbability.join(', ') }}]</p>
+    <div class="columnButtonAndOutput">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="onStationaryProbability()"
+      >
+        {{ "obliczPrawdopodobieństwoStacjonarne" | translate }}
+      </button>
+      <div *ngIf="stationaryProbability.length > 0">
+        <p>[{{ stationaryProbability.join(", ") }}]</p>
+      </div>
+    </div>
+
+    <div class="columnButtonAndOutput">
+      <button mat-raised-button color="primary">
+        {{ "stanPochlaniajacy" | translate }}
+      </button>
+      <div></div>
     </div>
   </div>
-
-  <div class="columnButtonAndOutput">
-    <button mat-raised-button color="primary" >{{'stanPochlaniajacy' | translate}}</button>
-    <div>
-
-    </div>
+  <div>
+    <p id="validationMessage"></p>
   </div>
-</div>
-<div>
-  <p id="validationMessage"></p>
 </div>

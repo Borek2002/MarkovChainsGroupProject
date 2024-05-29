@@ -40,8 +40,8 @@
         (mouseleave)="handleNodeMouseLeave(node)"
       >
         <svg:circle
-          [attr.cx]="node.dimension.width/2"
-          [attr.cy]="node.dimension.height/2"
+          [attr.cx]="node.dimension.width / 2"
+          [attr.cy]="node.dimension.height / 2"
           [attr.r]="Math.max(node.dimension.width, node.dimension.height) / 2"
           [attr.fill]="node.data.color"
           [attr.stroke]="node.data.hover ? 'green' : 'none'"
@@ -52,17 +52,23 @@
           [attr.x]="10"
           [attr.y]="node.dimension.height / 2"
         >
-          {{ node.label }}<tspan baseline-shift="sub" [innerHTML]="node.id"></tspan>
+          {{ node.label }}
+          <tspan baseline-shift="sub" [innerHTML]="node.id"></tspan>
         </svg:text>
       </svg:g>
     </ng-template>
 
     <ng-template #linkTemplate let-link>
-      <svg:g class="edge" (dblclick)="handleEdgeDoubleClick(link)">
+      <svg:g
+        class="edge"
+        (dblclick)="handleEdgeDoubleClick(link)"
+        (mouseenter)="handleEdgeMouseEnter(link)"
+        (mouseleave)="handleEdgeMouseLeave(link)"
+      >
         <svg:path
           class="line"
           [attr.stroke-width]="getLineWidth(link.label)"
-
+          [attr.stroke]="this.hoveredEdge == link ? 'green' : 'gray'"
           marker-end="url(#arrow)"
         ></svg:path>
         <svg:text class="edge-label" text-anchor="middle">

@@ -1,30 +1,26 @@
 import {
-    ChangeDetectorRef,
-    Component,
-    ElementRef,
-    OnInit,
-    ViewChild,
-    OnDestroy
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  OnDestroy
 } from '@angular/core';
-import {
-    Edge, Graph,
-    Node,
-} from '@swimlane/ngx-graph';
+import { Edge, Graph, Node } from '@swimlane/ngx-graph';
+import { Subject } from 'rxjs';
+import { NavService } from '../component/nav/nav.service';
+import { GraphDataService } from 'src/app/graph/data-access/GraphDataService';
+import { GraphComponent } from './ui/graph.component';
+import { MatrixAndVectorService } from '../matrix/service/matrix-and-vector-service';
 import { interval, Subscription } from 'rxjs';
-import {Subject} from "rxjs";
-import {NavService} from "../component/nav/nav.service";
-import {GraphDataService} from "src/app/graph/data-access/GraphDataService"
-import {GraphComponent} from "./ui/graph.component";
-import {MatrixAndVectorService} from "../matrix/service/matrix-and-vector-service";
 import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-graph-page',
   templateUrl: './graph-page.component.html',
-  styleUrls: ['./graph-page.component.css']
+  styleUrls: ['./graph-page.component.css'],
 })
-export class GraphPageComponent implements OnInit{
-
+export class GraphPageComponent implements OnInit {
   @ViewChild('graphContainer') graphContainer!: ElementRef;
   @ViewChild(GraphComponent) graphComponent!: GraphComponent;
   sidebarOpened: boolean = true;
@@ -73,45 +69,33 @@ export class GraphPageComponent implements OnInit{
     });
   }
 
-  getMatrixAndVector(){
-    this.graphComponent.getMatrixAndVector();
+  getNodesAndEdges() {
+    this.graphComponent.getNodesAndEdges();
   }
 
-  setInterpolationType(curveType:any){
+  setInterpolationType(curveType: any) {
     this.graphComponent.setInterpolationType(curveType);
   }
 
-  onCreateNodeClick() {
-    const newNode: Node = {
-      id: '' + (this.graphDataService.getNodes().length + 1),
-      label: 'S',
-    };
-    this.graphDataService.addNode(newNode);
+  updateGraph() {
     this.graphComponent.updateGraph();
   }
 
-  updateGraph(){
-    this.graphComponent.updateGraph();
-  }
-
-  centerGraph(){
+  centerGraph() {
     this.graphComponent.centerGraph();
   }
 
-  zoomToFit(){
+  zoomToFit() {
     this.graphComponent.zoomToFit();
   }
 
-  onCreateEdgeClick() {
-    this.graphComponent.toggleCreateEdgeMode();
-  }
-
   updateGraphData() {
-    this.matrixAndVectorService.getMatrixAndVector().subscribe(data => {
+    this.matrixAndVectorService.getNodesAndEdges().subscribe((data) => {
       this.graph = data;
-    })
+    });
   }
 
+  protected readonly GraphComponent = GraphComponent;
 
 
   nextStateClicked() {
