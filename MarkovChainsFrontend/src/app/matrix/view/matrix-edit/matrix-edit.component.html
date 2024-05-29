@@ -19,7 +19,7 @@
             type="number"
             [ngClass]="{
               highlighted:
-                j === this.highlightedNode - 1 ||
+                i === this.highlightedNode - 1 ||
                 (i === this.highlightedEdge.source - 1 &&
                   j === this.highlightedEdge.target - 1)
             }"
