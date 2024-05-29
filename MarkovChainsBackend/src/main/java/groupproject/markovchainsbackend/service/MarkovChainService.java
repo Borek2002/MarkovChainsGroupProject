@@ -4,8 +4,6 @@ import groupproject.markovchainsbackend.dto.MarkovRequest;
 import groupproject.markovchainsbackend.markovchain.MarkovChain;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.math3.linear.Array2DRowRealMatrix;
-import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +47,9 @@ public class MarkovChainService {
 
     public void setMatrixAndVector(MarkovRequest request) {
         this.markovChain.setMatrixAndVector(request);
+    }
+
+    public Integer simulate(int n) {
+        return this.markovChain.simulate(n);
     }
 }

@@ -8,7 +8,6 @@ import lombok.Setter;
 import org.apache.commons.math3.linear.*;
 import org.springframework.stereotype.Component;
 
-import javax.management.ConstructorParameters;
 
 @Getter
 @Setter
@@ -19,6 +18,7 @@ public class MarkovChain {
     private RealMatrix transitionMatrix;
     private RealVector initialVector;
     private int steps;
+    private int currentState = -1;
 
     public MarkovChain(RealMatrix transitionMatrix, RealVector initialVector) {
         this.transitionMatrix = transitionMatrix;
@@ -131,6 +131,57 @@ public class MarkovChain {
         }
         return diagonalElements;
     }
+
+    public Integer simulate(int steps) {
+        System.out.println("Simulation started. Initial state: " + currentState);
+        if(currentState < 0){
+            double randomValue = Math.random();
+            double cumulativeProbability = 0.0;
+
+            for (int nextState = 0; nextState < initialVector.getDimension(); nextState++) {
+                cumulativeProbability += initialVector.getEntry(nextState);
+                System.out.println("vector" + nextState);
+                System.out.println("vector" + randomValue);
+                System.out.println("vector" + cumulativeProbability);
+                if (randomValue <= cumulativeProbability) {
+                    currentState = nextState + 1;
+                    return currentState;
+                }
+            }
+            // This should never happen if the transition matrix is correctly defined
+            throw new RuntimeException("Invalid transition probabilities");
+        }
+        else{
+            for (int i = 0; i < steps; i++) {
+                int nextState = getNextState();
+                System.out.println("Step " + (i + 1) + ": Moved from state " + currentState + " to state " + nextState);
+                currentState = nextState;
+            }
+            System.out.println("Simulation completed.");
+            return currentState;
+        }
+
+    }
+
+
+    private int getNextState() {
+        double[] probabilities = transitionMatrix.getRow(currentState-1);
+        double randomValue = Math.random();
+        double cumulativeProbability = 0.0;
+
+        for (int nextState = 0; nextState < probabilities.length; nextState++) {
+            cumulativeProbability += probabilities[nextState];
+            System.out.println(nextState);
+            System.out.println(randomValue);
+            System.out.println(cumulativeProbability);
+            if (randomValue <= cumulativeProbability) {
+                return nextState + 1;
+            }
+        }
+        // This should never happen if the transition matrix is correctly defined
+        throw new RuntimeException("Invalid transition probabilities");
+    }
+
 
     public MarkovRequest getMatrixAndVector(){
         return MarkovRequest.builder()

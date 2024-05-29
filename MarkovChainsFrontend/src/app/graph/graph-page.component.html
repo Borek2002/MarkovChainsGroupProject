@@ -70,6 +70,7 @@
             Center
           </button>
         </div>
+
       </div>
     </div>
     <app-matrix-edit
@@ -112,5 +113,19 @@
         (blur)="selectedEdge = null"
       />
     </div>
+    <div class="simulation_button">
+      <button *ngIf="!SimulationIsExpanded" (click)="toggleSimulation()"><img src="assets/buttons/menu.png" alt="Next step"/></button>
+    </div>
+    <div class="simulation" [ngClass]="{ 'expanded': SimulationIsExpanded }">
+      <button (click)="nextStateClicked()">
+        <img src="assets/buttons/next_step.png" alt="Next step"/>
+      </button>
+      <button (click)="toggleAutoStep()">
+        <img [src]="autoStepActive ? 'assets/buttons/pause_auto_step.png' : 'assets/buttons/auto_step.png'"
+             alt="automatic"/>
+      </button>
+      <input id="range" type="range" name="points" min="1" max="10" value="1" (input)="updateSpeed($event)">
+    </div>
+
   </mat-drawer-content>
 </mat-drawer-container>

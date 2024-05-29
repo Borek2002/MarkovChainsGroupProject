@@ -2,8 +2,6 @@ package groupproject.markovchainsbackend.contoller;
 
 import groupproject.markovchainsbackend.dto.MarkovRequest;
 import groupproject.markovchainsbackend.service.MarkovChainService;
-import org.apache.commons.math3.linear.Array2DRowRealMatrix;
-import org.apache.commons.math3.linear.ArrayRealVector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,6 +47,13 @@ public class MarkovChainControllerImp implements MarkovChainController {
     public ResponseEntity<Void> setMatrixAndVector(@RequestBody MarkovRequest request){
         this.markovChainService.setMatrixAndVector(request);
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public String getNextState(@RequestBody int n) {
+        // Tutaj implementuj logikę przejścia do następnego stanu w łańcuchu Markova
+        int currentState = 1;
+        return String.valueOf(this.markovChainService.simulate(n));
     }
 
 
