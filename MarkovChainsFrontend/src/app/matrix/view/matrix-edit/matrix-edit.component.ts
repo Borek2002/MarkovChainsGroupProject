@@ -14,6 +14,8 @@ import {MatrixAndVectorService} from "../../service/matrix-and-vector-service";
 export class MatrixEditComponent implements OnInit{
   rowsAndColumns: number = 3;
   data: MatrixAndVector = {transitionMatrix: [], initialVector: []};
+  convertedData: MatrixAndVector = {transitionMatrix: [], initialVector: []};
+  nSteps: number=0;
   finalProbability: number[] = [];
   probabilityAfterNSteps: number[] = [];
   stationaryProbability: number[] = [];
@@ -30,40 +32,39 @@ export class MatrixEditComponent implements OnInit{
   ngOnInit(): void {
   }
 
-  initializeMatrix() {
+  initializeMatrix(): void {
     this.data.transitionMatrix = [];
-    this.data.initialVector = []
+    this.data.initialVector = [];
+
+    // Initialize the matrix with zeros in a column-major format
     for (let i = 0; i < this.rowsAndColumns; i++) {
-      let row = [];
-      /*let rowSum = 0; // sum of elements in the row
+      let column: number[] = [];
       for (let j = 0; j < this.rowsAndColumns; j++) {
-        // Generating a floating-point number with two decimal places
-        let randomNum = Math.random() * 100; // Range 0-100 for two decimal places
-        randomNum = Math.round(randomNum) / 100; // Rounding to two decimal places
-        row.push(randomNum);
-        rowSum += randomNum; // Adding the number to the row sum
+        column.push(0.0);
       }
+      this.data.transitionMatrix.push(column);
+    }
 
-      // Scaling the row so that the sum is equal to 1
-      for (let j = 0; j < this.rowsAndColumns; j++) {
-        row[j] /= rowSum;
-        // Rounding to two decimal places
-        row[j] = Math.round(row[j] * 100) / 100;
-      }
+    // Transpose the matrix to convert to row-major format
 
-      // Correction to ensure the sum of the row is exactly 1 after rounding
-      let sumDifference = 1 - row.reduce((acc, val) => acc + val, 0);
-      // Adding the difference to the last element of the row
-      row[row.length - 1] += sumDifference;
-      row[row.length - 1] = parseFloat(row[row.length - 1].toFixed(2));
-      this.matrix.push(row);*/
-      for (let j = 0; j < this.rowsAndColumns; j++) {
-        row.push(0.0);
-      }
-      this.data.transitionMatrix.push(row);
+
+    // Initialize the initial vector with zeros
+    for (let i = 0; i < this.rowsAndColumns; i++) {
       this.data.initialVector.push(0.0);
     }
   }
+
+  transposeMatrix(matrix: number[][]): number[][] {
+    let transposed: number[][] = [];
+    for (let i = 0; i < matrix[0].length; i++) {
+      transposed[i] = [];
+      for (let j = 0; j < matrix.length; j++) {
+        transposed[i][j] = matrix[j][i];
+      }
+    }
+    return transposed;
+  }
+
   onCellMatrixBlur(value: any, rowIndex: number, colIndex: number) {
     this.data.transitionMatrix[rowIndex][colIndex] = value;
     console.log(value)
@@ -76,8 +77,10 @@ export class MatrixEditComponent implements OnInit{
 
   onSave() {
     if (this.validateMatrixRowSumToOne()) {
-      console.log("Zapisano zmiany: ", this.data.transitionMatrix);
-      this.matrixAndVectorService.putVectorAndMatrix(this.data!).subscribe(
+      this.convertedData.transitionMatrix = this.transposeMatrix(this.data.transitionMatrix);
+      this.convertedData.initialVector=this.data.initialVector;
+      console.log("Zapisano zmiany: ", this.convertedData.transitionMatrix);
+      this.matrixAndVectorService.putVectorAndMatrix(this.convertedData!).subscribe(
         response => {
           console.log('Response:', response);
           this.graphUpdated.emit();
@@ -95,7 +98,7 @@ export class MatrixEditComponent implements OnInit{
   }
 
   onProbabilityAfterNSteps() {
-    this.matrixAndVectorService.getProbabilityAfterNSteps()
+    this.matrixAndVectorService.getProbabilityAfterNSteps(this.nSteps)
       .subscribe(result => this.probabilityAfterNSteps = result);
   }
 
@@ -115,11 +118,15 @@ export class MatrixEditComponent implements OnInit{
     }
     if (!isValid) {
       this.dialog.open(ValidationRowModalComponent, {
-        data: {title: 'Błąd walidacji', message: 'Proszę poprawić macierz, aby suma każdego wiersza wynosiła 1.'}
+        data: {
+          title: 'Błąd walidacji',
+          message: 'Proszę poprawić macierz, aby suma każdego wiersza wynosiła 1.'
+        }
       });
     }
     return isValid;
   }
+
 
 
   moveMatrixFocus(rowIndex: number, colIndex: number, event: KeyboardEvent): void {
