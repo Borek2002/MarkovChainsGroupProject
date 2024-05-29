@@ -1,0 +1,13 @@
+<form [formGroup]="form">
+  <div *ngFor="let row of form.controls; let i = index">
+    <input *ngFor="let col of row.controls" [formControl]="col" type="number">
+  </div>
+</form>
+<button type="button" (click)="resizeMatrix(rows + 1, cols)">Dodaj wiersz</button>
+<button type="button" (click)="resizeMatrix(rows - 1, cols)">Usuń wiersz</button>
+<button type="button" (click)="resizeMatrix(rows, cols + 1)">Dodaj kolumnę</button>
+<button type="button" (click)="resizeMatrix(rows, cols - 1)">Usuń kolumnę</button>
+<pre>
+  {{ form?.value | json }}
+</pre>
+

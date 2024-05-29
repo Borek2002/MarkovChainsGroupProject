@@ -1,41 +1,90 @@
-import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
-import {MatDialog} from "@angular/material/dialog";
-import {ValidationRowModalComponent} from "../validation-row-modal/validation-row-modal.component";
-import {Node, Edge, Graph} from "@swimlane/ngx-graph";
-import {MatrixAndVector} from "../../model/matrixAndVector";
-import {MatrixAndVectorService} from "../../service/matrix-and-vector-service";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ValidationRowModalComponent } from '../validation-row-modal/validation-row-modal.component';
+import { Node, Edge, Graph } from '@swimlane/ngx-graph';
+import { MatrixAndVector } from '../../model/matrixAndVector';
+import { MatrixAndVectorService } from '../../service/matrix-and-vector-service';
+import { Subscription } from 'rxjs';
+import { GraphDataService } from 'src/app/graph/data-access/GraphDataService';
+import { Matrix } from 'd3';
 
 @Component({
   selector: 'app-matrix-edit',
   templateUrl: './matrix-edit.component.html',
-  styleUrls: ['./matrix-edit.component.css']
+  styleUrls: ['./matrix-edit.component.css'],
 })
-
-export class MatrixEditComponent implements OnInit{
+export class MatrixEditComponent implements OnInit {
   rowsAndColumns: number = 3;
+
   data: MatrixAndVector = {transitionMatrix: [], initialVector: []};
-  convertedData: MatrixAndVector = {transitionMatrix: [], initialVector: []};
   nSteps: number=0;
+
   finalProbability: number[] = [];
   probabilityAfterNSteps: number[] = [];
   stationaryProbability: number[] = [];
   matrix: number[][] = [];
-  initialVector: number[]=[];
+  initialVector: number[] = [];
+  highlightedNode: string = '';
+  highlightedEdge: { source: string; target: string } = {
+    source: '',
+    target: '',
+  };
+  private nodeHighlightSubscription: Subscription = new Subscription();
+  private edgeHighlightSubscription: Subscription = new Subscription();
 
   @Output() graphUpdated = new EventEmitter<void>();
 
-  constructor(private matrixAndVectorService: MatrixAndVectorService,
-              public dialog: MatDialog) {
+  constructor(
+    private matrixAndVectorService: MatrixAndVectorService,
+    private graphDataService: GraphDataService,
+    public dialog: MatDialog
+  ) {
     this.initializeMatrix();
   }
 
   ngOnInit(): void {
+    this.matrixAndVectorService.getMatrixAndVector().subscribe(
+      (response) => {
+        if (response) {
+          this.data = response;
+        } else {
+          this.initializeMatrix();
+        }
+      },
+      (error) => {
+        console.error('An error occurred: ' + error);
+      }
+    );
+
+    this.nodeHighlightSubscription =
+      this.graphDataService.highlightedNode$.subscribe((nodeId) => {
+        this.highlightedNode = nodeId;
+      });
+    this.edgeHighlightSubscription =
+      this.graphDataService.highlightedLink$.subscribe((edge) => {
+        this.highlightedEdge = edge;
+      });
+  }
+
+  ngOnDestroy() {
+    this.nodeHighlightSubscription.unsubscribe();
+    this.edgeHighlightSubscription.unsubscribe();
+  }
+
+  highlightNode(nodeId: string) {
+    this.highlightedNode = nodeId;
   }
 
   initializeMatrix(): void {
     this.data.transitionMatrix = [];
     this.data.initialVector = [];
-
     // Initialize the matrix with zeros in a column-major format
     for (let i = 0; i < this.rowsAndColumns; i++) {
       let column: number[] = [];
@@ -52,12 +101,12 @@ export class MatrixEditComponent implements OnInit{
 
   onCellMatrixBlur(value: any, rowIndex: number, colIndex: number) {
     this.data.transitionMatrix[rowIndex][colIndex] = value;
-    console.log(value)
+    console.log(value);
   }
 
   onCellVectorBlur(value: any, colIndex: number) {
     this.data.initialVector[colIndex] = value;
-    console.log(value)
+    console.log(value);
   }
 
   onSave() {
@@ -76,24 +125,30 @@ export class MatrixEditComponent implements OnInit{
   }
 
   onFinalProbability() {
-    this.matrixAndVectorService.getFinalProbability()
-      .subscribe(result => this.finalProbability = result);
+    this.matrixAndVectorService
+      .getFinalProbability()
+      .subscribe((result) => (this.finalProbability = result));
   }
 
   onProbabilityAfterNSteps() {
-    this.matrixAndVectorService.getProbabilityAfterNSteps(this.nSteps)
-      .subscribe(result => this.probabilityAfterNSteps = result);
+    this.matrixAndVectorService
+      .getProbabilityAfterNSteps()
+      .subscribe((result) => (this.probabilityAfterNSteps = result));
   }
 
   onStationaryProbability() {
-    this.matrixAndVectorService.getStationaryProbability()
-      .subscribe(result => this.stationaryProbability = result);
+    this.matrixAndVectorService
+      .getStationaryProbability()
+      .subscribe((result) => (this.stationaryProbability = result));
   }
 
   validateMatrixRowSumToOne(): boolean {
     let isValid = true;
     for (let i = 0; i < this.rowsAndColumns; i++) {
-      const rowSum = this.data.transitionMatrix[i].reduce((sum, value) => sum + value, 0);
+      const rowSum = this.data.transitionMatrix[i].reduce(
+        (sum, value) => sum + value,
+        0
+      );
       if (Math.abs(rowSum - 1) > 0.0001) {
         isValid = false;
         break;
@@ -110,11 +165,14 @@ export class MatrixEditComponent implements OnInit{
     return isValid;
   }
 
-
-
   moveMatrixFocus(rowIndex: number, colIndex: number, event: KeyboardEvent): void {
     event.preventDefault();
-    if (rowIndex >= 0 && rowIndex < this.data.transitionMatrix.length && colIndex >= 0 && colIndex < this.data.transitionMatrix[0].length) {
+    if (
+      rowIndex >= 0 &&
+      rowIndex < this.data.transitionMatrix.length &&
+      colIndex >= 0 &&
+      colIndex < this.data.transitionMatrix[0].length
+    ) {
       const inputId = 'matrixInput_' + rowIndex + '_' + colIndex;
       const inputElement = document.getElementById(inputId) as HTMLInputElement;
       if (inputElement) {
@@ -133,7 +191,4 @@ export class MatrixEditComponent implements OnInit{
       }
     }
   }
-
-
-
 }

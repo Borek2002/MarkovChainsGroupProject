@@ -1,4 +1,4 @@
-export interface MatrixAndVector{
+export interface MatrixAndVector {
   transitionMatrix: number[][];
   initialVector: number[];
 }

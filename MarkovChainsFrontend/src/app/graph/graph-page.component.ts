@@ -21,9 +21,10 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-graph-page',
   templateUrl: './graph-page.component.html',
-  styleUrls: ['./graph-page.component.css']
+  styleUrls: ['./graph-page.component.css'],
 })
-export class GraphPageComponent implements OnInit{
+
+export class GraphPageComponent implements OnInit {
 
   @ViewChild('graphContainer') graphContainer!: ElementRef;
   @ViewChild(GraphComponent) graphComponent!: GraphComponent;
@@ -41,7 +42,13 @@ export class GraphPageComponent implements OnInit{
 
   curveType: string = 'curveBundle';
 
-  interpolationTypes = ['Bundle', 'Cardinal', 'Catmull Rom', 'Monotone X', 'Natural'];
+  interpolationTypes = [
+    'Bundle',
+    'Cardinal',
+    'Catmull Rom',
+    'Monotone X',
+    'Natural',
+  ];
 
   panOnZoom: boolean = false;
   autoZoom: boolean = false;
@@ -51,8 +58,8 @@ export class GraphPageComponent implements OnInit{
 
   graph: Graph = {
     nodes: [],
-    edges: []
-  }
+    edges: [],
+  };
 
   // Deklaracja obiektu Subject do wywoływania aktualizacji widoku
   private updateGraph$: Subject<boolean> = new Subject<boolean>();
@@ -60,12 +67,12 @@ export class GraphPageComponent implements OnInit{
   constructor(private cdr: ChangeDetectorRef, private navService: NavService, private graphDataService: GraphDataService, private matrixAndVectorService: MatrixAndVectorService, private http: HttpClient) {}
 
   toggleSidebar() {
-      this.sidebarOpened = !this.sidebarOpened;
+    this.sidebarOpened = !this.sidebarOpened;
   }
 
-    toggleSimulation() {
-      this.SimulationIsExpanded = true;
-    }
+  toggleSimulation() {
+    this.SimulationIsExpanded = true;
+  }
 
   ngOnInit() {
     this.navService.toggleSidebarEvent.subscribe(() => {
@@ -73,44 +80,34 @@ export class GraphPageComponent implements OnInit{
     });
   }
 
-  getMatrixAndVector(){
-    this.graphComponent.getMatrixAndVector();
+  getNodesAndEdges() {
+    this.graphComponent.getNodesAndEdges();
   }
 
-  setInterpolationType(curveType:any){
+  setInterpolationType(curveType: any) {
     this.graphComponent.setInterpolationType(curveType);
   }
 
-  onCreateNodeClick() {
-    const newNode: Node = {
-      id: '' + (this.graphDataService.getNodes().length + 1),
-      label: 'S',
-    };
-    this.graphDataService.addNode(newNode);
+  updateGraph() {
     this.graphComponent.updateGraph();
   }
 
-  updateGraph(){
-    this.graphComponent.updateGraph();
-  }
-
-  centerGraph(){
+  centerGraph() {
     this.graphComponent.centerGraph();
   }
 
-  zoomToFit(){
+  zoomToFit() {
     this.graphComponent.zoomToFit();
   }
 
-  onCreateEdgeClick() {
-    this.graphComponent.toggleCreateEdgeMode();
+  updateGraphData() {
+    this.matrixAndVectorService.getNodesAndEdges().subscribe((data) => {
+      this.graph = data;
+    });
   }
 
-  updateGraphData() {
-    this.matrixAndVectorService.getMatrixAndVector().subscribe(data => {
-      this.graph = data;
-    })
-  }
+
+  protected readonly GraphComponent = GraphComponent;
 
 
 
@@ -188,5 +185,4 @@ export class GraphPageComponent implements OnInit{
         this.autoStepSubscription.unsubscribe();
       }
     }
-
 }
