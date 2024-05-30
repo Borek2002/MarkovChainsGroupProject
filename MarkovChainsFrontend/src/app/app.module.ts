@@ -10,7 +10,7 @@ import { FooterComponent } from './component/footer/footer.component';
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
-import { MatrixEditComponent } from './matrix/view/matrix-edit/matrix-edit.component';
+import { MatrixEditDetailsComponent } from './matrix/view/matrix-edit-details/matrix-edit-details.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ValidationRowModalComponent } from './matrix/view/validation-row-modal/validation-row-modal.component';
@@ -21,6 +21,7 @@ import {MaterialModule} from "./graph/utils/material.module";
 import {GraphComponent} from "./graph/ui/graph.component";
 import {MatrixAndVectorService} from "./matrix/service/matrix-and-vector-service";
 import { TheoryComponent } from './theory/theory.component';
+import {GraphMatrixComponent} from "./matrix/view/graph-matrix/graph-matrix.component";
 
 export function HttpLoaderFactory(http:HttpClient){
   return new  TranslateHttpLoader(http);
@@ -33,11 +34,12 @@ export function HttpLoaderFactory(http:HttpClient){
     MainComponent,
     NavComponent,
     FooterComponent,
-    MatrixEditComponent,
+    MatrixEditDetailsComponent,
     ValidationRowModalComponent,
     GraphComponent,
     GraphPageComponent,
     TheoryComponent,
+    GraphMatrixComponent
   ],
   imports: [
     BrowserModule,
