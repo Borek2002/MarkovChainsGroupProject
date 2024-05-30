@@ -16,11 +16,11 @@ import { GraphDataService } from 'src/app/graph/data-access/GraphDataService';
 import { Matrix } from 'd3';
 
 @Component({
-  selector: 'app-matrix-edit',
-  templateUrl: './matrix-edit.component.html',
-  styleUrls: ['./matrix-edit.component.css']
+  selector: 'app-matrix-edit-details',
+  templateUrl: './matrix-edit-details.component.html',
+  styleUrls: ['./matrix-edit-details.component.css']
 })
-export class MatrixEditComponent implements OnInit {
+export class MatrixEditDetailsComponent implements OnInit {
   rowsAndColumns: number = 3;
   data: MatrixAndVector = { transitionMatrix: [], initialVector: [] };
   convertedData: MatrixAndVector = {transitionMatrix: [], initialVector: []};
@@ -28,6 +28,7 @@ export class MatrixEditComponent implements OnInit {
   finalProbability: number[] = [];
   probabilityAfterNSteps: number[] = [];
   stationaryProbability: number[] = [];
+  immersiveState:number=-2;
   matrix: number[][] = [];
   initialVector: number[] = [];
   highlightedNode: string = '';
@@ -137,6 +138,11 @@ export class MatrixEditComponent implements OnInit {
     this.matrixAndVectorService
       .getStationaryProbability()
       .subscribe((result) => (this.stationaryProbability = result));
+  }
+
+  onImmersiveState(){
+    this.matrixAndVectorService.getImmersiveState()
+      .subscribe((result)=>this.immersiveState=result)
   }
 
   validateMatrixRowSumToOne(): boolean {

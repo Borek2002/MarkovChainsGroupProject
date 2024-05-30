@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MatrixEditComponent } from './matrix-edit.component';
+import { MatrixEditDetailsComponent } from './matrix-edit-details.component';
 
 describe('MatrixEditComponent', () => {
-  let component: MatrixEditComponent;
-  let fixture: ComponentFixture<MatrixEditComponent>;
+  let component: MatrixEditDetailsComponent;
+  let fixture: ComponentFixture<MatrixEditDetailsComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [MatrixEditComponent]
+      declarations: [MatrixEditDetailsComponent]
     });
-    fixture = TestBed.createComponent(MatrixEditComponent);
+    fixture = TestBed.createComponent(MatrixEditDetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

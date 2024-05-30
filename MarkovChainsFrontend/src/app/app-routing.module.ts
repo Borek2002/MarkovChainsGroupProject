@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {MatrixEditComponent} from "./matrix/view/matrix-edit/matrix-edit.component";
+import {MatrixEditDetailsComponent} from "./matrix/view/matrix-edit-details/matrix-edit-details.component";
 import {GraphPageComponent} from "./graph/graph-page.component";
 import { TheoryComponent } from './theory/theory.component';
 
 const routes: Routes = [
   {
-    component: MatrixEditComponent,
+    component: MatrixEditDetailsComponent,
     path: "matrix",
     data: {showHamburgerMenu: false}
   },
@@ -22,7 +22,7 @@ const routes: Routes = [
   },
   {
     path:"**",
-    redirectTo:"/matrix"
+    redirectTo:"/theory"
   }
 ];
 
