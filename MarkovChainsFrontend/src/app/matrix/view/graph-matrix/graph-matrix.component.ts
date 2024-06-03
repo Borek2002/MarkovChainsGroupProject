@@ -49,6 +49,7 @@ export class GraphMatrixComponent implements OnInit{
       (response) => {
         if (response) {
           this.data = response;
+          this.rowsAndColumns=this.data.transitionMatrix.length;
         } else {
           this.initializeMatrix();
         }

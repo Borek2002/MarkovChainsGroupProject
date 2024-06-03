@@ -21,7 +21,7 @@ public interface MarkovChainController {
 
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/markovchain/matrixAndVector")
-    public MarkovRequest getMatrixAndVector();
+    public ResponseEntity<Object> getMatrixAndVector();
 
     @CrossOrigin(origins = "http://localhost:4200")
     @PutMapping("/markovchain/matrixAndVector")

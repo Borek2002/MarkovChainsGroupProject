@@ -61,10 +61,11 @@ public class MarkovChain {
     }
 
     public int getImmersiveState() {
+        RealMatrix transposedMatrix = transitionMatrix.transpose();
         int immersive = -1;
-        for (int i = 0; i < this.transitionMatrix.getColumnDimension(); i++) {
-            for (int j = 0; j < this.transitionMatrix.getRowDimension(); j++) {
-                if (i == j && this.transitionMatrix.getEntry(i, j) == 1) {
+        for (int i = 0; i < transposedMatrix.getColumnDimension(); i++) {
+            for (int j = 0; j < transposedMatrix.getRowDimension(); j++) {
+                if (i == j && transposedMatrix.getEntry(i, j) == 1) {
                     immersive = i;
                 }
             }
@@ -192,10 +193,14 @@ public class MarkovChain {
 
 
     public MarkovRequest getMatrixAndVector(){
-        return MarkovRequest.builder()
-                .initialVector(this.initialVector.toArray())
-                .transitionMatrix(this.transitionMatrix.getData())
-                .build();
+        if(this.initialVector==null || this.transitionMatrix==null){
+            return null;
+        }else {
+            return MarkovRequest.builder()
+                    .initialVector(this.initialVector.toArray())
+                    .transitionMatrix(this.transitionMatrix.getData())
+                    .build();
+        }
     }
 
     public void setMatrixAndVector(MarkovRequest request) {
