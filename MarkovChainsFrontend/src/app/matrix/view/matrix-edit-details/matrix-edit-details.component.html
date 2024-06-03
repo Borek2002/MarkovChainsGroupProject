@@ -18,9 +18,10 @@
             <td *ngFor="let field of item | keyvalue; let j = index">
               <input
                 type="number"
+                [ngStyle]="{'background-color': highlightedNode.color}"
                 [ngClass]="{
               highlighted:
-                i === this.highlightedNode - 1 ||
+                i === this.highlightedNode.nodeId - 1 ||
                 (i === this.highlightedEdge.source - 1 &&
                   j === this.highlightedEdge.target - 1)
             }"

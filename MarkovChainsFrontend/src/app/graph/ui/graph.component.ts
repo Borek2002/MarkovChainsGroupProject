@@ -69,6 +69,7 @@ export class GraphComponent implements OnInit, OnDestroy, AfterViewInit {
   private selectedEdge: Edge | null = null;
 
   hoveredEdge: Edge | null = null;
+  hoveredEdgeInSimulation: boolean = false;
   @Output() nodeHover: EventEmitter<string> = new EventEmitter<string>();
   @Output() edgeHover: EventEmitter<string> = new EventEmitter<string>();
 
@@ -142,12 +143,12 @@ export class GraphComponent implements OnInit, OnDestroy, AfterViewInit {
 
   handleNodeMouseEnter(node: Node) {
     node.data.hover = true;
-    this.graphDataService.updateHighlightedNode(node.id);
+    this.graphDataService.updateHighlightedNode(node.id, 'green');
   }
 
   handleNodeMouseLeave(node: Node) {
     node.data.hover = false;
-    this.graphDataService.updateHighlightedNode('-1');
+    this.graphDataService.updateHighlightedNode('-1', '');
   }
 
   handleEdgeDoubleClick(edge: Edge) {
@@ -156,12 +157,12 @@ export class GraphComponent implements OnInit, OnDestroy, AfterViewInit {
 
   handleEdgeMouseEnter(edge: Edge) {
     this.hoveredEdge = edge;
-    this.graphDataService.updateHighlightedLink(edge.source, edge.target);
+    this.graphDataService.updateHighlightedLink(edge.source, edge.target, 'green');
   }
 
   handleEdgeMouseLeave(edge: Edge) {
     this.hoveredEdge = null;
-    this.graphDataService.updateHighlightedLink('-1', '-1');
+    this.graphDataService.updateHighlightedLink('-1', '-1', '');
   }
 
   getLineWidth(label: string): number {

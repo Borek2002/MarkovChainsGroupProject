@@ -22,10 +22,14 @@ export class GraphMatrixComponent implements OnInit{
   immersiveState:number=-2;
   matrix: number[][] = [];
   initialVector: number[] = [];
-  highlightedNode: string = '';
-  highlightedEdge: { source: string; target: string } = {
+  highlightedNode: { nodeId: string; color: string} = {
+    nodeId: '',
+    color: '',
+  };
+  highlightedEdge: { source: string; target: string; color: string } = {
     source: '',
     target: '',
+    color: '',
   };
   private nodeHighlightSubscription: Subscription = new Subscription();
   private edgeHighlightSubscription: Subscription = new Subscription();
@@ -55,8 +59,8 @@ export class GraphMatrixComponent implements OnInit{
     );
 
     this.nodeHighlightSubscription =
-      this.graphDataService.highlightedNode$.subscribe((nodeId) => {
-        this.highlightedNode = nodeId;
+      this.graphDataService.highlightedNode$.subscribe((node) => {
+        this.highlightedNode = node;
       });
     this.edgeHighlightSubscription =
       this.graphDataService.highlightedLink$.subscribe((edge) => {
@@ -70,7 +74,7 @@ export class GraphMatrixComponent implements OnInit{
   }
 
   highlightNode(nodeId: string) {
-    this.highlightedNode = nodeId;
+    this.highlightedNode.nodeId = nodeId;
   }
 
   initializeMatrix(): void {
