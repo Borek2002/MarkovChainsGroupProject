@@ -10,20 +10,20 @@ import { TagContentType } from '@angular/compiler';
 export class GraphDataService {
   private nodes: Node[] = [];
   private links: Edge[] = [];
-  private highlightedNodeSubject: Subject<string> = new Subject<string>();
+  private highlightedNodeSubject: Subject<{ nodeId: string, color: string}> = new Subject<{ nodeId: string, color: string}>();
   highlightedNode$ = this.highlightedNodeSubject.asObservable();
-  private highlightedLinkSubject: Subject<{ source: string; target: string }> =
-    new Subject<{ source: string; target: string }>();
+  private highlightedLinkSubject: Subject<{ source: string; target: string; color: string }> =
+    new Subject<{ source: string; target: string; color: string }>();
   highlightedLink$ = this.highlightedLinkSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
-  updateHighlightedNode(nodeId: string) {
-    this.highlightedNodeSubject.next(nodeId);
+  updateHighlightedNode(nodeId: string, color: string) {
+    this.highlightedNodeSubject.next({nodeId, color});
   }
 
-  updateHighlightedLink(source: string, target: string) {
-    this.highlightedLinkSubject.next({ source, target });
+  updateHighlightedLink(source: string, target: string, color: string) {
+    this.highlightedLinkSubject.next({ source, target, color });
   }
 
   getNodes(): Node[] {

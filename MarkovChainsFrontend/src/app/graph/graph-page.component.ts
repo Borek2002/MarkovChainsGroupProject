@@ -99,46 +99,64 @@ export class GraphPageComponent implements OnInit {
 
 
   nextStateClicked() {
-    const steps = 1; // Zawsze przekazujemy 1 krok
-    this.http.post<any>('/markovchain/next-state', steps).subscribe(response => {
-      this.previousState = this.currentState;
-      this.currentState = response.toString();
+    if(!this.graphComponent.hoveredEdgeInSimulation){
+        const steps = 1; // Zawsze przekazujemy 1 krok
 
-      const previousNode = this.graph.nodes.find(node => node.id === this.previousState);
-      const currentNode = this.graph.nodes.find(node => node.id === this.currentState);
+        this.http.post<any>('/markovchain/next-state', steps).subscribe(response => {
+          this.updateState(response.toString());
+        });
+    }
 
-      if (previousNode) {
-        // Resetujemy kolor poprzedniego węzła
-        previousNode.data.color = "#a8385d";
-      }
-
-      if (currentNode) {
-        // Podświetlamy krawędź prowadzącą do nowego węzła
-        const edge = this.graph.edges.find(edge => edge.source === this.previousState && edge.target === this.currentState);
-
-        if (edge) {
-          //edge.data.color = '#FFFF00'; // Podświetlamy krawędź na czerwono
-
-          setTimeout(() => {
-            // Gasimy krawędź po 2 sekundach
-            //edge.data.color = 'gray';
-
-            // Podświetlamy nowy węzeł
-            const originalColor = currentNode.data.color;
-            currentNode.data.color = '#FFFF00';
-
-
-          }, this.speed/2);
-        } else {
-          // Jeśli nie znaleziono krawędzi, podświetlamy nowy węzeł od razu
-          const originalColor = currentNode.data.color;
-          currentNode.data.color = '#FFFF00';
-
-
-        }
-      }
-    });
   }
+
+  updateState(newState: string) {
+    this.previousState = this.currentState;
+    this.currentState = newState;
+
+    this.resetPreviousNodeColor();
+    this.highlightCurrentNode();
+  }
+
+  resetPreviousNodeColor() {
+    const previousNode = this.graph.nodes.find(node => node.id === this.previousState);
+    if (previousNode) {
+      previousNode.data.color = "#a8385d";
+      this.graphDataService.updateHighlightedNode('-1', '');
+    }
+  }
+
+  highlightCurrentNode() {
+    const currentNode = this.graph.nodes.find(node => node.id === this.currentState);
+    if (currentNode) {
+      const currentEdge = this.graph.edges.find(edge => edge.source === this.previousState && edge.target === this.currentState);
+
+      if (currentEdge) {
+        this.highlightEdgeAndNode(currentEdge, currentNode);
+      } else {
+        this.highlightNode(currentNode);
+      }
+    }
+  }
+
+  highlightEdgeAndNode(edge: any, node: any) {
+    this.graphComponent.hoveredEdgeInSimulation = true;
+    this.graphComponent.hoveredEdge = edge;
+    this.graphDataService.updateHighlightedLink(edge.source, edge.target, '#FFFF00');
+
+    setTimeout(() => {
+      this.graphComponent.hoveredEdgeInSimulation = false;
+      this.graphComponent.hoveredEdge = null;
+      this.graphDataService.updateHighlightedLink('-1', '-1', '');
+      this.highlightNode(node);
+    }, this.speed / 2);
+  }
+
+  highlightNode(node: any) {
+    const originalColor = node.data.color;
+    node.data.color = '#FFFF00';
+    this.graphDataService.updateHighlightedNode(node.id, '#FFFF00');
+  }
+
 
   toggleAutoStep() {
       this.autoStepActive = !this.autoStepActive;

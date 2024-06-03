@@ -68,7 +68,7 @@
         <svg:path
           class="line"
           [attr.stroke-width]="getLineWidth(link.label)"
-          [attr.stroke]="this.hoveredEdge == link ? 'green' : 'gray'"
+          [attr.stroke]="this.hoveredEdge && this.hoveredEdge.id == link.id ? (this.hoveredEdgeInSimulation ? '#FFFF00' : 'green') : 'gray'"
           marker-end="url(#arrow)"
         ></svg:path>
         <svg:text class="edge-label" text-anchor="middle">

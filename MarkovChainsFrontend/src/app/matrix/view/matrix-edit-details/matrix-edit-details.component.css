@@ -28,9 +28,7 @@ td input {
   text-align: center;
 }
 
-td input.highlighted {
-  background-color: green;
-}
+
 
 #calculationButtons {
   display: inline;
