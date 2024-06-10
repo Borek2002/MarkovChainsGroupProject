@@ -17,16 +17,7 @@
           <td *ngFor="let field of item | keyvalue; let j = index">
             <input
               type="number"
-              [ngStyle]="{
-      'background-color': (i === this.highlightedNode.nodeId - 1 ||
-                          (i === this.highlightedEdge.source - 1 &&
-                          j === this.highlightedEdge.target - 1)) ? highlightedNode.color ||  highlightedEdge.color : 'initial'
-    }"
-              [ngClass]="{
-      highlighted: i === this.highlightedNode.nodeId - 1 ||
-                  (i === this.highlightedEdge.source - 1 &&
-                  j === this.highlightedEdge.target - 1)
-            }"
+              [ngStyle]="{'background-color': getBackgroundColor(i, j)}"
               inputmode="none"
               [(ngModel)]="field.value"
               (blur)="onCellMatrixBlur(field.value, i, j)"

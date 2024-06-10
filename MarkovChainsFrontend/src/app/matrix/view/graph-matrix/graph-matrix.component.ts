@@ -22,15 +22,29 @@ export class GraphMatrixComponent implements OnInit{
   immersiveState:number=-2;
   matrix: number[][] = [];
   initialVector: number[] = [];
-  highlightedNode: { nodeId: string; color: string} = {
-    nodeId: '',
-    color: '',
-  };
-  highlightedEdge: { source: string; target: string; color: string } = {
-    source: '',
-    target: '',
-    color: '',
-  };
+  highlightedNode: { nodeId: string; color: string,  isSimulation: boolean} = {
+        nodeId: '',
+        color: '',
+        isSimulation: false,
+      };
+  highlightedEdge: { source: string; target: string; color: string,  isSimulation: boolean} = {
+        source: '',
+        target: '',
+        color: '',
+        isSimulation: false,
+      };
+
+  hoveredNode: { nodeId: string; color: string} = {
+        nodeId: '',
+        color: '',
+      };
+  hoveredEdge: { source: string; target: string; color: string} = {
+        source: '',
+        target: '',
+        color: '',
+      };
+
+
   private nodeHighlightSubscription: Subscription = new Subscription();
   private edgeHighlightSubscription: Subscription = new Subscription();
 
@@ -59,15 +73,37 @@ export class GraphMatrixComponent implements OnInit{
       }
     );
 
-    this.nodeHighlightSubscription =
-      this.graphDataService.highlightedNode$.subscribe((node) => {
-        this.highlightedNode = node;
-      });
-    this.edgeHighlightSubscription =
-      this.graphDataService.highlightedLink$.subscribe((edge) => {
-        this.highlightedEdge = edge;
-      });
+    this.nodeHighlightSubscription = this.graphDataService.highlightedNode$.subscribe((node) => {
+          if (node.isSimulation) {
+            this.highlightedNode = node;
+          } else {
+            this.hoveredNode = node;
+          }
+        });
+        this.edgeHighlightSubscription = this.graphDataService.highlightedLink$.subscribe((edge) => {
+          if (edge.isSimulation) {
+            this.highlightedEdge = edge;
+          } else {
+            this.hoveredEdge = edge;
+          }
+        });
   }
+
+   getBackgroundColor(i: number, j: number): string {
+      // Sprawdzenie, czy jest najechane kursorem
+      if (i + 1 === Number(this.hoveredNode.nodeId) ||
+          (i + 1 === Number(this.hoveredEdge.source) && j + 1 === Number(this.hoveredEdge.target)) ){
+        return this.hoveredNode.color || this.hoveredEdge.color;
+      }
+
+      // Sprawdzenie, czy jest podświetlone przez symulację
+      if (i + 1 === Number(this.highlightedNode.nodeId) ||
+          (i + 1 === Number(this.highlightedEdge.source) && j + 1 === Number(this.highlightedEdge.target))) {
+        return this.highlightedNode.color || this.highlightedEdge.color;
+      }
+
+      return '#d8f3dc';
+    }
 
   ngOnDestroy() {
     this.nodeHighlightSubscription.unsubscribe();
@@ -107,6 +143,12 @@ export class GraphMatrixComponent implements OnInit{
   onSave() {
     if (this.validateMatrixRowSumToOne()) {
       console.log('Zapisano zmiany: ', this.data.transitionMatrix);
+
+      this.highlightedNode = { nodeId: '',  color: '',  isSimulation: false};
+      this.highlightedEdge = { source: '', target: '', color: '', isSimulation: false };
+      this.hoveredNode = { nodeId: '', color: '' };
+      this.hoveredEdge = { source: '', target: '', color: '' };
+
       this.matrixAndVectorService.putVectorAndMatrix(this.data!).subscribe(
         (response) => {
           console.log('Response:', response);

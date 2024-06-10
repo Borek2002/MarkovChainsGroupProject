@@ -92,6 +92,10 @@ export class GraphPageComponent implements OnInit {
   updateGraphData() {
     this.matrixAndVectorService.getNodesAndEdges().subscribe((data) => {
       this.graph = data;
+
+      this.currentState = "";
+      this.previousState = "";
+      this.highlightedEdge = "";
     });
   }
 
@@ -99,7 +103,7 @@ export class GraphPageComponent implements OnInit {
 
 
   nextStateClicked() {
-    if(!this.graphComponent.hoveredEdgeInSimulation){
+    if(!this.graphComponent.highlightedInSimulation){
         const steps = 1; // Zawsze przekazujemy 1 krok
 
         this.http.post<any>('/markovchain/next-state', steps).subscribe(response => {
@@ -121,7 +125,7 @@ export class GraphPageComponent implements OnInit {
     const previousNode = this.graph.nodes.find(node => node.id === this.previousState);
     if (previousNode) {
       previousNode.data.color = "#a8385d";
-      this.graphDataService.updateHighlightedNode('-1', '');
+      this.graphDataService.highlightNode('-1', '');
     }
   }
 
@@ -139,22 +143,22 @@ export class GraphPageComponent implements OnInit {
   }
 
   highlightEdgeAndNode(edge: any, node: any) {
-    this.graphComponent.hoveredEdgeInSimulation = true;
-    this.graphComponent.hoveredEdge = edge;
-    this.graphDataService.updateHighlightedLink(edge.source, edge.target, '#FFFF00');
+    this.graphComponent.highlightedInSimulation = true;
+    this.graphComponent.highlightedEdge = edge;
+    this.graphDataService.highlightEdge(edge.source, edge.target, this.graphComponent.color1);
 
     setTimeout(() => {
-      this.graphComponent.hoveredEdgeInSimulation = false;
-      this.graphComponent.hoveredEdge = null;
-      this.graphDataService.updateHighlightedLink('-1', '-1', '');
+      this.graphComponent.highlightedInSimulation = false;
+      this.graphComponent.highlightedEdge = null;
+      this.graphDataService.highlightEdge('-1', '-1', '');
       this.highlightNode(node);
     }, this.speed / 2);
   }
 
   highlightNode(node: any) {
     const originalColor = node.data.color;
-    node.data.color = '#FFFF00';
-    this.graphDataService.updateHighlightedNode(node.id, '#FFFF00');
+    node.data.color = this.graphComponent.color1;
+    this.graphDataService.highlightNode(node.id, this.graphComponent.color1);
   }
 
 

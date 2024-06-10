@@ -204,6 +204,7 @@ public class MarkovChain {
     }
 
     public void setMatrixAndVector(MarkovRequest request) {
+        currentState = -1;
         this.initialVector = new ArrayRealVector(request.getInitialVector());
         this.transitionMatrix = new Array2DRowRealMatrix(request.getTransitionMatrix());
     }

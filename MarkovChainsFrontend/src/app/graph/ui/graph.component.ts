@@ -61,6 +61,8 @@ export class GraphComponent implements OnInit, OnDestroy, AfterViewInit {
   update$: Subject<boolean> = new Subject();
   center$: Subject<boolean> = new Subject();
   zoomToFit$: Subject<boolean> = new Subject();
+  color1 = '#8fd6ff';
+  color2 = "green";
 
   private selectedSourceNode: Node | null = null;
   private selectedTargetNode: Node | null = null;
@@ -69,7 +71,8 @@ export class GraphComponent implements OnInit, OnDestroy, AfterViewInit {
   private selectedEdge: Edge | null = null;
 
   hoveredEdge: Edge | null = null;
-  hoveredEdgeInSimulation: boolean = false;
+  highlightedEdge: Edge | null = null;
+  highlightedInSimulation: boolean = false;
   @Output() nodeHover: EventEmitter<string> = new EventEmitter<string>();
   @Output() edgeHover: EventEmitter<string> = new EventEmitter<string>();
 
@@ -137,18 +140,33 @@ export class GraphComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  getStrokeColor(link: any): string {
+
+      // Podświetlenie kursorem ma wyższy priorytet
+      if (this.hoveredEdge && link.source === this.hoveredEdge.source && link.target === this.hoveredEdge.target) {
+        return this.color2;
+      }
+
+      // Podświetlenie przez symulację
+      if (this.highlightedEdge && link.source === this.highlightedEdge.source && link.target === this.highlightedEdge.target) {
+        return this.color1;
+      }
+
+      return 'gray';
+    }
+
   handleNodeDoubleClick(node: Node) {
     this.selectedNode = node;
   }
 
   handleNodeMouseEnter(node: Node) {
     node.data.hover = true;
-    this.graphDataService.updateHighlightedNode(node.id, 'green');
+    this.graphDataService.hoverNode(node.id, this.color2);
   }
 
   handleNodeMouseLeave(node: Node) {
     node.data.hover = false;
-    this.graphDataService.updateHighlightedNode('-1', '');
+    this.graphDataService.hoverNode('-1', '');
   }
 
   handleEdgeDoubleClick(edge: Edge) {
@@ -157,12 +175,12 @@ export class GraphComponent implements OnInit, OnDestroy, AfterViewInit {
 
   handleEdgeMouseEnter(edge: Edge) {
     this.hoveredEdge = edge;
-    this.graphDataService.updateHighlightedLink(edge.source, edge.target, 'green');
+    this.graphDataService.hoverEdge(edge.source, edge.target, this.color2);
   }
 
   handleEdgeMouseLeave(edge: Edge) {
     this.hoveredEdge = null;
-    this.graphDataService.updateHighlightedLink('-1', '-1', '');
+    this.graphDataService.hoverEdge('-1', '-1', '');
   }
 
   getLineWidth(label: string): number {
@@ -190,6 +208,7 @@ export class GraphComponent implements OnInit, OnDestroy, AfterViewInit {
     this.matrixAndVectorService.getNodesAndEdges().subscribe((data) => {
       this.graph.nodes = data.nodes;
       this.graph.edges = data.edges;
+
       this.update$.next(true);
     });
   }

@@ -10,21 +10,33 @@ import { TagContentType } from '@angular/compiler';
 export class GraphDataService {
   private nodes: Node[] = [];
   private links: Edge[] = [];
-  private highlightedNodeSubject: Subject<{ nodeId: string, color: string}> = new Subject<{ nodeId: string, color: string}>();
+  private highlightedNodeSubject: Subject<{ nodeId: string, color: string, isSimulation: boolean }> = new Subject<{ nodeId: string, color: string, isSimulation: boolean }>();
   highlightedNode$ = this.highlightedNodeSubject.asObservable();
-  private highlightedLinkSubject: Subject<{ source: string; target: string; color: string }> =
-    new Subject<{ source: string; target: string; color: string }>();
+
+  private highlightedLinkSubject: Subject<{ source: string; target: string; color: string, isSimulation: boolean }> = new Subject<{ source: string; target: string; color: string, isSimulation: boolean }>();
   highlightedLink$ = this.highlightedLinkSubject.asObservable();
+
 
   constructor(private http: HttpClient) {}
 
-  updateHighlightedNode(nodeId: string, color: string) {
-    this.highlightedNodeSubject.next({nodeId, color});
+  // Emitowanie danych dla podświetlenia przez symulację
+  highlightNode(nodeId: string, color: string) {
+    this.highlightedNodeSubject.next({nodeId, color, isSimulation: true });
   }
 
-  updateHighlightedLink(source: string, target: string, color: string) {
-    this.highlightedLinkSubject.next({ source, target, color });
+  highlightEdge(source: string, target: string, color: string) {
+    this.highlightedLinkSubject.next({ source, target, color, isSimulation: true });
   }
+
+  // Emitowanie danych dla podświetlenia przez najechanie kursorem
+  hoverNode(nodeId: string, color: string) {
+    this.highlightedNodeSubject.next({nodeId, color, isSimulation: false });
+  }
+
+  hoverEdge(source: string, target: string, color: string) {
+    this.highlightedLinkSubject.next({ source, target, color, isSimulation: false });
+  }
+
 
   getNodes(): Node[] {
     return this.nodes;
