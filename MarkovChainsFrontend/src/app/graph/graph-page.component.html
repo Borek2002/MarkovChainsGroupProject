@@ -138,18 +138,18 @@
         <button (click)="nextStateClicked()">
           <img src="assets/buttons/next_step.png" alt="Next step"/>
         </button>
-        <span>Krok</span>
+        <span>{{'step' | translate }}</span>
       </div>
       <div class="button-container">
         <button (click)="toggleAutoStep()">
           <img [src]="autoStepActive ? 'assets/buttons/pause_auto_step.png' : 'assets/buttons/auto_step.png'"
                alt="automatic"/>
         </button>
-        <span>{{ autoStepActive ? 'Stop symulacji' : 'Start symulacji' }}</span>
+        <span>{{ autoStepActive ? ('stopSimulation' | translate ): ('startSimulation' | translate )}}</span>
       </div>
       <div class="slider-container">
         <input id="range" type="range" name="points" min="1" max="10" value="1" (input)="updateSpeed($event)">
-        <span>Prędkość animacji</span>
+        <span>{{'animationSpeed' | translate }}</span>
       </div>
     </div>
 
