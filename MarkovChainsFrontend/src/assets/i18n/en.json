@@ -61,6 +61,9 @@
   "probability_after_n_steps_description": "The probability distribution of the states of the Markov chain after n steps. The initial probability distribution is multiplied by the transition matrix P n times.",
   "stationary_probability": "Stationary probability",
   "stationary_probability_description": "The probability distribution that remains unchanged under the action of the transition matrix P. The stationary probability vector π satisfies the equation: πP = π and ∑πi = 1, where πi is the probability of being in state i in the stationary distribution.",
-  "immersive_state_description": "An immersive state in the context of Markov chains is a state from which there is no exit - once reached, it remains unchanged. In the transition matrix, an immersive state has the probability of transitioning to itself equal to 1 and to all other states equal to 0."
-
+  "immersive_state_description": "An immersive state in the context of Markov chains is a state from which there is no exit - once reached, it remains unchanged. In the transition matrix, an immersive state has the probability of transitioning to itself equal to 1 and to all other states equal to 0.",
+  "stopSimulation": "Stop simulation",
+  "startSimulation": "Start simulation",
+  "step": "Step",
+  "animationSpeed": "Animation speed"
 }
