@@ -9,11 +9,11 @@ import {
   Output,
 } from '@angular/core';
 import {
-  ClusterNode,
+  ClusterNode, ColaForceDirectedLayout, D3ForceDirectedLayout, DagreLayout,
   DagreNodesOnlyLayout,
   Edge,
   Graph,
-  Layout,
+  Layout, NgxGraphZoomOptions,
   Node,
 } from '@swimlane/ngx-graph';
 import { Subject, Subscription } from 'rxjs';
@@ -48,7 +48,7 @@ export class GraphComponent implements OnInit, OnDestroy, AfterViewInit {
   curveType: string = 'curveBundle';
   curve: any = shape.curveBundle;
 
-  draggingEnabled: boolean = true;
+  draggingEnabled: boolean = false;
   panningEnabled: boolean = true;
   zoomEnabled: boolean = true;
   zoomSpeed: number = 0.1;
@@ -56,11 +56,11 @@ export class GraphComponent implements OnInit, OnDestroy, AfterViewInit {
   maxZoomLevel: number = 4.0;
   @Input() panOnZoom: boolean = false;
   @Input() autoZoom: boolean = false;
-  @Input() autoCenter: boolean = false;
+  @Input() autoCenter: boolean = true;
 
   update$: Subject<boolean> = new Subject();
   center$: Subject<boolean> = new Subject();
-  zoomToFit$: Subject<boolean> = new Subject();
+  zoomToFit$: Subject<NgxGraphZoomOptions> = new Subject();
   color1 = '#8fd6ff';
   color2 = "green";
 
@@ -201,7 +201,7 @@ export class GraphComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   zoomToFit() {
-    this.zoomToFit$.next(true);
+    this.zoomToFit$.next({autoCenter: this.autoCenter});
   }
 
   getNodesAndEdges() {

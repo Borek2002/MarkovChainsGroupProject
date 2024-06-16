@@ -1,14 +1,9 @@
-
-html{
-  background: #9ebda9;
-  height: 100vh;
-}
 *{
   font-family: "Comic Sans";
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
+body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .custom-button {
   display: inline-block;

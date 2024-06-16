@@ -28,8 +28,16 @@ mat-checkbox {
   margin-bottom: 10px;
 }
 
-.button {
+button {
+  color: #d8f3dc;
+  height: 115%;
+  font-size: 95%;
+  background-color: #1b4332;
+  border-radius: 8px;
   margin: 3px;
+}
+button:hover {
+  background-color: #52b788;
 }
 
 .sidebar-toggle-button {
@@ -125,10 +133,6 @@ button {
   border: none;
   background-color: transparent;
   cursor: pointer;
-}
-
-button:hover {
-  background-color: #ccc;
 }
 
 .edge-path {

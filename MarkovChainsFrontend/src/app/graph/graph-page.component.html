@@ -22,38 +22,20 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-checkbox [(ngModel)]="panOnZoom" name="panOnZoom"
+        <mat-checkbox [(ngModel)]="panOnZoom" name="panOnZoom" hidden="hidden"
           >Pan while zooming</mat-checkbox
         >
 
-        <mat-checkbox [(ngModel)]="autoZoom" name="autoZoom"
+        <mat-checkbox [(ngModel)]="autoZoom" name="autoZoom" hidden="hidden"
           >Auto Zoom
         </mat-checkbox>
 
-        <mat-checkbox [(ngModel)]="autoCenter" name="autoCenter"
+        <mat-checkbox [(ngModel)]="autoCenter" name="autoCenter" hidden="hidden"
           >Auto Center
         </mat-checkbox>
       </form>
     </mat-expansion-panel>
     <div class="button-container">
-      <!--<div class="row">
-        <div class="col">
-          <button mat-raised-button color="primary" class="button btn btn-primary btn-block" (click)="onCreateNodeClick()">
-            Create Node
-          </button>
-        </div>
-        <div class="col">
-          <button mat-raised-button color="primary" class="button btn btn-primary btn-block" (click)="onCreateEdgeClick()">
-            Create Edge
-          </button>
-        </div>
-        <div class="col">
-          <button mat-raised-button color="primary" class="button btn btn-primary btn-block" (click)="getNodesAndEdges()">
-            Get Matrix
-          </button>
-        </div>
-      </div>-->
-
       <div class="row row-cols-auto">
         <div class="col">
           <button

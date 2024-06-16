@@ -59,6 +59,7 @@ button:hover {
 }
 #container-matrix{
   display: flex;
+  padding: 20px 20px 0 20px;
 }
 #column-matrix{
   flex: 60%;
