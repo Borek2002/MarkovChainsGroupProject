@@ -60,5 +60,9 @@
   "probability_after_n_steps_description": "Rozkład prawdopodobieństwa stanów łańcucha Markowa po n krokach. Początkowy rozkład prawdopodobieństwa jest przemnażany przez macierz przejść P n-krotnie.",
   "stationary_probability": "Prawdopodobieństwo stacjonarne",
   "stationary_probability_description": "Rozkład prawdopodobieństwa, który pozostaje niezmienny pod działaniem macierzy przejść P. Wektor prawdopodobieństwa stacjonarnego π spełnia równanie: πP = π oraz ∑πi = 1 gdzie πi to prawdopodobieństwo bycia w stanie i w rozkładzie stacjonarnym",
-  "immersive_state_description": "Stan pochłaniający w kontekście łańcuchów Markowa to taki stan, z którego nie ma wyjścia - raz osiągnięty, pozostaje niezmieniony. W macierzy przejść stan pochłaniający ma prawdopodobieństwo przejścia do samego siebie równe 1, a do wszystkich innych stanów równe 0."
+  "immersive_state_description": "Stan pochłaniający w kontekście łańcuchów Markowa to taki stan, z którego nie ma wyjścia - raz osiągnięty, pozostaje niezmieniony. W macierzy przejść stan pochłaniający ma prawdopodobieństwo przejścia do samego siebie równe 1, a do wszystkich innych stanów równe 0.",
+  "stopSimulation": "Stop symulacji",
+  "startSimulation": "Start symulacji",
+  "step": "Krok",
+  "animationSpeed": "Prędkość animacji"
 }

@@ -109,25 +109,6 @@ public class MarkovChain {
 
         // Przemnóż wektor początkowy przez uzyskaną macierz
         RealVector finalVector = PInverseDToInfinityP.operate(initialVector);
-
-        // Wyświetlanie wyników
-        System.out.println("Macierz A:");
-        MarkovChain.printMatrix(transposedMatrix);
-
-        System.out.println("Macierz diagonalna D:");
-        MarkovChain.printMatrix(diagonalMatrix);
-
-        System.out.println("Macierz odwracalna P:");
-        MarkovChain.printMatrix(eigenvectorMatrix);
-
-        System.out.println("Macierz odwracalna P^-1:");
-        MarkovChain.printMatrix(inverseP);
-
-        System.out.println("PInverseDToInfinityP:");
-        MarkovChain.printMatrix(PInverseDToInfinityP);
-
-        System.out.println("Wektor prawdopodobieństw finalnych dla n dążącego do nieskończoności:");
-        MarkovChain.printVector(finalVector);
         return finalVector;
     }
 
@@ -142,16 +123,12 @@ public class MarkovChain {
     }
 
     public Integer simulate(int steps) {
-        System.out.println("Simulation started. Initial state: " + currentState);
         if(currentState < 0){
             double randomValue = Math.random();
             double cumulativeProbability = 0.0;
 
             for (int nextState = 0; nextState < initialVector.getDimension(); nextState++) {
                 cumulativeProbability += initialVector.getEntry(nextState);
-                System.out.println("vector" + nextState);
-                System.out.println("vector" + randomValue);
-                System.out.println("vector" + cumulativeProbability);
                 if (randomValue <= cumulativeProbability) {
                     currentState = nextState + 1;
                     return currentState;
@@ -163,10 +140,8 @@ public class MarkovChain {
         else{
             for (int i = 0; i < steps; i++) {
                 int nextState = getNextState();
-                System.out.println("Step " + (i + 1) + ": Moved from state " + currentState + " to state " + nextState);
                 currentState = nextState;
             }
-            System.out.println("Simulation completed.");
             return currentState;
         }
 
@@ -180,9 +155,6 @@ public class MarkovChain {
 
         for (int nextState = 0; nextState < probabilities.length; nextState++) {
             cumulativeProbability += probabilities[nextState];
-            System.out.println(nextState);
-            System.out.println(randomValue);
-            System.out.println(cumulativeProbability);
             if (randomValue <= cumulativeProbability) {
                 return nextState + 1;
             }
@@ -204,6 +176,7 @@ public class MarkovChain {
     }
 
     public void setMatrixAndVector(MarkovRequest request) {
+        currentState = -1;
         this.initialVector = new ArrayRealVector(request.getInitialVector());
         this.transitionMatrix = new Array2DRowRealMatrix(request.getTransitionMatrix());
     }

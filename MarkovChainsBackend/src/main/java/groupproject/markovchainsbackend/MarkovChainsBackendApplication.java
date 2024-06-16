@@ -21,7 +21,7 @@ public class MarkovChainsBackendApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(MarkovChainsBackendApplication.class, args);
-
+        System.out.println("Aplikacja jest dostępna pod adresem: http://localhost:8080");
     }
     @Bean
     public CorsWebFilter corsWebFilter() {
